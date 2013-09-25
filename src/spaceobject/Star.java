@@ -8,11 +8,11 @@ package spaceobject;
 public class Star extends SpaceObject {
 
 	private int radius;
-	final static int MAX_RADIUS = 100;
-	final static int MIN_RADIUS = 10;
+	public final static int MAX_RADIUS = 100;
+	public final static int MIN_RADIUS = 10;
 	
 	public Star(int x, int y, int radius) {
-		super(x, y);
+		super(x, y, radius);
 		if (radius > MAX_RADIUS)
 			this.radius = MAX_RADIUS;
 		else if (radius < MIN_RADIUS)

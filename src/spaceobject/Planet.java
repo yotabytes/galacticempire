@@ -13,13 +13,14 @@ public class Planet extends SpaceObject {
 	final static int MIN_RADIUS = 10;
 
 	public Planet(int x, int y, int radius) {
-		super(x, y);
+		super(x, y, radius);
 		if (radius > MAX_RADIUS)
 			this.radius = MAX_RADIUS;
 		else if (radius < MIN_RADIUS)
 			this.radius = MIN_RADIUS;
 		else
 			this.radius = radius;
+
 	}
 
 	public int getRadius() {

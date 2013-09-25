@@ -7,7 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class WorldView extends BasicGameState {
 	
-	private World world;
+	private World world; //The world this view is connected to
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
