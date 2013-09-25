@@ -53,10 +53,14 @@ public class World {
 	 * 
 	 * @param 	width
 	 * @param 	height
+	 * @param	planets
+	 * @param	stars
 	 */
-	public World(int width, int height){
+	public World(int width, int height, Collection<Planet> planets, Collection<Star> stars){
 		this.width = width;
 		this.height = height;
+		this.planets = planets;
+		this.stars = stars;
 	}
 	
 }

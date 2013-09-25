@@ -23,6 +23,12 @@ public abstract class SpaceObject {
 	public void setY(int y) {
 		this.y = y;
 	}
+	public int getRadius(){
+		return radius;
+	}
+	public void setRadius(int radius){
+		this.radius = radius;
+	}
 	
 	/**
 	 * Return the distance between this coordinate and an other. 

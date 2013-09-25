@@ -18,7 +18,7 @@ public class WorldGenerator {
 	
 	// constants:
 	
-	final static int MIN_SPACEOBJECT_DISTANCE = 50;
+	final static int MIN_STAR_DISTANCE = 50;
 	
 	// Variables:
 	
@@ -82,7 +82,7 @@ public class WorldGenerator {
 	 * @param 	mineralDensity
 	 * 			The number of minerals per planet available in this world. capped between 1 and 5.
 	 */
-	public WorldGenerator(int height, int width, double planetDensity, double starDensity, double mineralDensity){
+	public WorldGenerator(int width, int height, double planetDensity, double starDensity, double mineralDensity){
 		this.height = height;
 		this.width = width;
 		generateWorld(planetDensity,starDensity,mineralDensity);
@@ -107,7 +107,7 @@ public class WorldGenerator {
 				rY = randomGenerator.nextInt(getHeight() - 2 * Star.MAX_RADIUS) + Star.MAX_RADIUS;
 				rR = randomGenerator.nextInt(Star.MAX_RADIUS - Star.MIN_RADIUS) + Star.MIN_RADIUS;
 				newStar = new Star(rX,rY,rR);
-			} while (!isSpawnableSpaceObject((Collection<SpaceObject>) newStars, (SpaceObject) newStar));
+			} while (!isSpawnableStar(newStars, newStar));
 			newStars.add(newStar);
 		}
 		
@@ -126,13 +126,18 @@ public class WorldGenerator {
 	/*
 	 * Space objects can only if there is a certain distance between the closest other spaceobject.
 	 */
-	private boolean isSpawnableSpaceObject(Collection<SpaceObject> spaceObjects, SpaceObject newObject){
+	private boolean isSpawnableStar(Collection<Star> stars, Star newStar){
 		boolean isSpawnable = true;
-		for (SpaceObject obj: spaceObjects){
-			if (obj.getDistanceBetween(newObject.getX(), newObject.getY()) - obj.getRadius() - newObject.getRadius() < MIN_SPACEOBJECT_DISTANCE)
+		for (Star str: stars){
+			if (str.getDistanceBetween(newStar.getX(), newStar.getY()) - str.getRadius() - newStar.getRadius() < MIN_STAR_DISTANCE)
 				isSpawnable = false;
 		}
 		return isSpawnable;
 	}
+
+	public World getWorld() {
+		return new World(this.width, this.height,this.planets, this.stars);
+	}
+
 
 }
