@@ -17,7 +17,7 @@ public class MainMenu extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame sbg, Graphics g)
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		 g.setColor(Color.white);
 		    g.drawString("Galactic Empire", 150, 10);

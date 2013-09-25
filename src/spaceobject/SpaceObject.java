@@ -22,5 +22,6 @@ public abstract class SpaceObject {
 		this.y = y;
 	}
 	
+	public String getDescription;
 	
 }

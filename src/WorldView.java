@@ -6,6 +6,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public class WorldView extends BasicGameState {
+	
+	private World world;
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
