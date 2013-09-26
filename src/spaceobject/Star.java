@@ -9,7 +9,7 @@ public class Star extends SpaceObject {
 
 	private int radius;
 	public final static int MAX_RADIUS = 100;
-	public final static int MIN_RADIUS = 10;
+	public final static int MIN_RADIUS = 20;
 	private final double temperature;
 	public Star(int x, int y, int radius) {
 		super(x, y, radius);

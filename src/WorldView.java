@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import spaceobject.Planet;
 import spaceobject.SpaceObject;
 import spaceobject.Star;
 
@@ -19,12 +20,14 @@ public class WorldView extends BasicGameState {
 	private WorldGenerator generator;
 	private Image background;
 	private Image star;
+	private Image planet;
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.generator = new WorldGenerator(3000,3000,0.02,0.006,3);
+		this.generator = new WorldGenerator(4000,4000,0.01,0.005,3);
 		this.world = generator.getWorld();
 		this.background = new Image("img/spacebackground.png");
 		this.star = new Image("img/planet-2.png");
+		this.planet = new Image("img/planet-1.png");
 	}
 
 	@Override
@@ -42,6 +45,10 @@ public class WorldView extends BasicGameState {
 		for(Star str : world.getStars()){
 			float scale = ((float)2*str.getRadius() / (float)star.getHeight());
 			star.draw(str.getX(), str.getY(), scale);
+		}
+		for(Planet plt : world.getPlanets()){
+			float scale = ((float)2*plt.getRadius() / (float)planet.getHeight());
+			planet.draw(plt.getX(), plt.getY(), scale);
 		}
 		
 	}

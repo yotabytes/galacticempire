@@ -9,7 +9,8 @@ public class Planet extends SpaceObject {
 	private int radius; //radius of the Planet
 	private ArrayList<Mineral> Minerals;
 	private boolean oxygen;
-	public final static int MAX_RADIUS = 100;
+	private boolean isLivable;
+	public final static int MAX_RADIUS = 60;
 	public final static int MIN_RADIUS = 10;
 	public final static int TEMPERATURE_MULTIPLIER = 837818;
 	private double temperature;
@@ -50,6 +51,10 @@ public class Planet extends SpaceObject {
 
 	public double getTemperature() {
 		return this.temperature;
+	}
+	
+	private void checkIsLivable(){
+		//TODO
 	}
 	
 }

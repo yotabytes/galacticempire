@@ -10,14 +10,14 @@ public class GalacticEmpire extends StateBasedGame {
 
 	public GalacticEmpire(String title) {
 		super(title);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	
 	
 	public static void main(String Args[]) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new GalacticEmpire("Galactic Empire"));
-		app.setDisplayMode(1400, 900, false);
+		app.setDisplayMode(1920, 1080, true);
 		app.start();
 	}
 

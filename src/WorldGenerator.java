@@ -18,8 +18,9 @@ public class WorldGenerator {
 	
 	// constants:
 	
-	final static int MIN_STAR_DISTANCE = 400;
-	final static int MIN_PLANET_DISTANCE = 100;
+	public final static int MIN_STAR_STAR_DISTANCE = 400;
+	public final static int MIN_PLANET_PLANET_DISTANCE = 150;
+	public final static int MIN_STAR_PLANET_DISTANCE = 200;
 	
 	// Variables:
 	
@@ -129,7 +130,7 @@ public class WorldGenerator {
 			do {
 				rX = randomGenerator.nextInt(getWidth() - 2 * Planet.MAX_RADIUS) + Planet.MAX_RADIUS;
 				rY = randomGenerator.nextInt(getHeight() - 2 * Planet.MAX_RADIUS) + Planet.MAX_RADIUS;
-				rR = randomGenerator.nextInt(Star.MAX_RADIUS - Planet.MIN_RADIUS) + Planet.MIN_RADIUS;
+				rR = randomGenerator.nextInt(Planet.MAX_RADIUS - Planet.MIN_RADIUS) + Planet.MIN_RADIUS;
 				newPlanet = new Planet(rX,rY,rR);
 			} while (!isSpawnablePlanet(newPlanets, newPlanet));
 			newPlanets.add(newPlanet);
@@ -143,10 +144,20 @@ public class WorldGenerator {
 		this.setPlanets(newPlanets);
 	}
 	
-	private boolean isSpawnablePlanet(Collection<Planet> newPlanets,
-			Planet newPlanet) {
-		// TODO Auto-generated method stub
-		return true;
+	private boolean isSpawnablePlanet(Collection<Planet> newPlanets, Planet newPlanet) {
+		boolean isSpawnable = true;
+		for(Planet plt : newPlanets){
+			if(plt.getDistanceBetween(newPlanet.getX(), newPlanet.getY()) - plt.getRadius() - newPlanet.getRadius() < MIN_PLANET_PLANET_DISTANCE){
+				return false;
+			}
+			for(Star str : this.getStars()){
+				if(newPlanet.getDistanceBetween(str.getX(), str.getY()) - str.getRadius() - newPlanet.getRadius() < MIN_STAR_PLANET_DISTANCE){
+					return false;
+				}
+			}
+		}
+		return isSpawnable;
+		
 	}
 
 	private void addMinerals(double mineralDensity){
@@ -160,8 +171,8 @@ public class WorldGenerator {
 	private boolean isSpawnableStar(Collection<Star> stars, Star newStar){
 		boolean isSpawnable = true;
 		for (Star str: stars){
-			if (str.getDistanceBetween(newStar.getX(), newStar.getY()) - str.getRadius() - newStar.getRadius() < MIN_STAR_DISTANCE)
-				isSpawnable = false;
+			if (str.getDistanceBetween(newStar.getX(), newStar.getY()) - str.getRadius() - newStar.getRadius() < MIN_STAR_STAR_DISTANCE)
+				return false;
 		}
 		return isSpawnable;
 	}
