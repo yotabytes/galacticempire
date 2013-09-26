@@ -7,6 +7,8 @@ import spaceobject.Star;
 
 import java.util.Random;
 
+import org.newdawn.slick.SlickException;
+
 
 /**
  * Contains everything related to generating a world.
@@ -83,11 +85,13 @@ public class WorldGenerator {
 	 * 			The number of stars per square with a size of maximum planet radius x maximum planet radius. Capped between 0.05 and 0.1.
 	 * @param 	mineralDensity
 	 * 			The number of minerals per planet available in this world. capped between 1 and 5.
+	 * @throws SlickException 
 	 */
-	public WorldGenerator(int width, int height, double planetDensity, double starDensity, double mineralDensity){
+	public WorldGenerator(int width, int height, double planetDensity, double starDensity, double mineralDensity) throws SlickException{
 		this.height = height;
 		this.width = width;
 		generateWorld(planetDensity,starDensity,mineralDensity);
+		setImage();
 	}
 	
 	private void generateWorld(double planetDensity, double starDensity, double mineralDensity){
@@ -177,9 +181,18 @@ public class WorldGenerator {
 		return isSpawnable;
 	}
 
+	private void setImage() throws SlickException{
+		for(Star str : this.getStars()){
+			str.setImage(ImageFactory.getImage(str));
+		}
+		for(Planet plt : this.getPlanets()){
+			plt.setImage(ImageFactory.getImage(plt));
+		}
+	}
 	public World getWorld() {
 		return new World(this.width, this.height,this.planets, this.stars);
 	}
-
+	
+	
 
 }

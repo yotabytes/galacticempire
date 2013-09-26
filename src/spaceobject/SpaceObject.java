@@ -1,9 +1,13 @@
 package spaceobject;
 
+import org.newdawn.slick.Image;
+
+
 public abstract class SpaceObject {
 	
 	private int x, y;
 	private int radius;
+	private Image image;
 	
 	public SpaceObject(int x, int y, int radius) {
 		this.x = x;
@@ -49,6 +53,13 @@ public abstract class SpaceObject {
 		return distance;
 	}
 	
+	public Image getImage(){
+		return this.image;
+	}
+	
+	public void setImage(Image image){
+		this.image = image;
+	}
 	
 	public String getDescription;
 	

@@ -2,6 +2,8 @@ package spaceobject;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Image;
+
 import minerals.Mineral;
 
 public class Planet extends SpaceObject {
@@ -10,6 +12,10 @@ public class Planet extends SpaceObject {
 	private ArrayList<Mineral> Minerals;
 	private boolean oxygen;
 	private boolean isLivable;
+	public final static int COLD_PLANET_TRESHOLD = 100;
+	public final static int HOT_PLANET_TRESHOLD = 1000;
+	public final static int MIN_LIVABLE_TEMPERATURE = 253;
+	public final static int MAX_LIVABLE_TEMPERATURE = 323;
 	public final static int MAX_RADIUS = 60;
 	public final static int MIN_RADIUS = 10;
 	public final static int TEMPERATURE_MULTIPLIER = 837818;
@@ -47,6 +53,7 @@ public class Planet extends SpaceObject {
 	
 	public void setTemperature(double temperature){
 		this.temperature = temperature;
+		checkIsLivable();
 	}
 
 	public double getTemperature() {
@@ -54,7 +61,13 @@ public class Planet extends SpaceObject {
 	}
 	
 	private void checkIsLivable(){
-		//TODO
+		if(MIN_LIVABLE_TEMPERATURE < this.temperature  && this.temperature < MAX_LIVABLE_TEMPERATURE){
+			this.isLivable = true;
+		}
+	}
+	
+	public boolean isLivable(){
+		return isLivable;
 	}
 	
 }

@@ -44,11 +44,11 @@ public class WorldView extends BasicGameState {
 		background.draw(0,0,bgScale);
 		for(Star str : world.getStars()){
 			float scale = ((float)2*str.getRadius() / (float)star.getHeight());
-			star.draw(str.getX(), str.getY(), scale);
+			str.getImage().draw(str.getX(), str.getY(), scale);
 		}
 		for(Planet plt : world.getPlanets()){
 			float scale = ((float)2*plt.getRadius() / (float)planet.getHeight());
-			planet.draw(plt.getX(), plt.getY(), scale);
+			plt.getImage().draw(plt.getX(), plt.getY(), scale);			
 		}
 		
 	}
