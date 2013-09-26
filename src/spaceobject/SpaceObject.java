@@ -1,5 +1,6 @@
 package spaceobject;
 
+
 import org.newdawn.slick.Image;
 
 

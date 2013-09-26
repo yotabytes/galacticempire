@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Collection;
+
 import spaceobject.*;
 
 /**
@@ -45,6 +47,13 @@ public class World {
 
 	public Collection<Star> getStars() {
 		return stars;
+	}
+	
+	public Collection<SpaceObject> getSpaceObjects() {
+		Collection<SpaceObject> allObjects = new ArrayList<SpaceObject>();
+		allObjects.addAll(planets);
+		allObjects.addAll(stars);
+		return allObjects;
 	}
 
 	// constructors and other code:

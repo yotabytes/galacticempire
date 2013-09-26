@@ -17,7 +17,7 @@ public class Planet extends SpaceObject {
 	public final static int MIN_LIVABLE_TEMPERATURE = 253;
 	public final static int MAX_LIVABLE_TEMPERATURE = 323;
 	public final static int MAX_RADIUS = 60;
-	public final static int MIN_RADIUS = 10;
+	public final static int MIN_RADIUS = 20;
 	public final static int TEMPERATURE_MULTIPLIER = 837818;
 	private double temperature;
 	public Planet(int x, int y, int radius) {

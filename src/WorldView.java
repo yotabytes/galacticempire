@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,38 +21,29 @@ public class WorldView extends BasicGameState {
 	private World world; //The world this view is connected to
 	private WorldGenerator generator;
 	private Image background;
-	private Image star;
-	private Image planet;
+	private int greatestScreenSize;
+	private float backgroundScale;
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.generator = new WorldGenerator(2000,2000,0.01,0.005,3);
+		this.generator = new WorldGenerator(4000,4000,0.01,0.005,3);
 		this.world = generator.getWorld();
 		this.background = new Image("img/spacebackground.png");
-		this.star = new Image("img/planet-2.png");
-		this.planet = new Image("img/planet-1.png");
+		if(world.getHeight() > world.getWidth()){
+			this.greatestScreenSize = world.getHeight();
+		}else{
+			this.greatestScreenSize = world.getWidth();
+		} 
+		this.backgroundScale = (float)greatestScreenSize / (float)background.getHeight();		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.setColor(Color.white);
 		g.translate(offsetX, offsetY);
-		int size;
-		if(world.getHeight() > world.getWidth()){
-			size = world.getHeight();
-		}else{
-			size = world.getWidth();
-		}
-		float bgScale = (float)size / (float)background.getHeight();
-		background.draw(0,0,bgScale);
-		for(Star str : world.getStars()){
-			float scale = ((float)2*str.getRadius() / (float)star.getHeight());
-			str.getImage().draw(str.getX(), str.getY(), scale);
-		}
-		for(Planet plt : world.getPlanets()){
-			float scale = ((float)2*plt.getRadius() / (float)planet.getHeight());
-			plt.getImage().draw(plt.getX(), plt.getY(), scale);			
-		}
-		
+		background.draw(0,0,backgroundScale);
+		drawPlanets();
+		drawStars();
+		checkMouseOver(gc.getInput(), g);
 	}
 
 	@Override
@@ -59,6 +52,18 @@ public class WorldView extends BasicGameState {
 		trackCameraMovement(gc,sbg, arg2);
 	}
 	
+	private void checkMouseOver(Input input, Graphics g) {
+		int mX = input.getMouseX();
+		int mY = input.getMouseY();
+		for(SpaceObject obj : world.getSpaceObjects()){
+			if(mouseOnSpaceObject(obj,mX,mY)){
+				g.drawOval(obj.getX() - obj.getRadius(), obj.getY() - obj.getRadius(), 2*obj.getRadius(), 2*obj.getRadius());
+				drawSpaceObjectStats(obj, g);
+			}
+		}
+		
+	}
+
 	private void trackCameraMovement(GameContainer gc, StateBasedGame sbg, int arg2){
 		if(gc.getInput().isKeyDown(Input.KEY_RIGHT)){
 			this.offsetX += -DEFAULT_OFFSET; 
@@ -85,7 +90,40 @@ public class WorldView extends BasicGameState {
 			offsetY = 0;
 		}
 	}
-
+	
+	private void drawPlanets(){
+		for(Planet plt : world.getPlanets()){
+			float scale = ((float)2*plt.getRadius() / (float)plt.getImage().getHeight());
+			plt.getImage().draw(plt.getX() - plt.getRadius(), plt.getY() - plt.getRadius(), scale);
+		}
+	}
+	private void drawStars(){
+		for(Star str : world.getStars()){
+			float scale = ((float)2*str.getRadius() / (float)str.getImage().getHeight());
+			str.getImage().draw(str.getX() - str.getRadius(), str.getY() - str.getRadius(), scale);
+		}
+	}
+	
+	private boolean mouseOnSpaceObject(SpaceObject obj, int mouseX, int mouseY){
+		if(obj.getDistanceBetween(mouseX - offsetX, mouseY - offsetY) < obj.getRadius()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+		
+	private void drawSpaceObjectStats(SpaceObject obj, Graphics g){
+		DecimalFormat fm = new DecimalFormat("#.##");
+		if(obj instanceof Planet){
+			String temp = fm.format(((Planet) obj).getTemperature() - 273) + "°C";
+			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
+			g.drawString("Oxygen: " + ((Planet)obj).hasOxygen(), obj.getX() + obj.getRadius(), obj.getY() - obj.getRadius() + g.getFont().getLineHeight());
+		}else{
+			String temp = fm.format(((Star) obj).getTemperature() - 273) + "°C";
+			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
+		}
+		
+	}
 	@Override
 	public int getID() {
 		return 1;

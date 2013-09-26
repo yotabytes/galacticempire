@@ -1,0 +1,18 @@
+<nifty>
+  <screen id="start">
+    <layer id="background" backgroundColor="#000f">
+      <!-- ... -->
+    </layer>
+    <layer id="foreground" backgroundColor="#0000" childLayout="vertical">
+      <!-- ... -->
+    </layer>
+  </screen>
+  <screen id="hud">
+    <layer id="background" backgroundColor="#000f">
+      <!-- ... -->
+    </layer>
+    <layer id="foreground" backgroundColor="#0000" childLayout="horizontal">
+      <!-- ... -->
+    </layer>
+  </screen>
+</nifty>
