@@ -1,5 +1,7 @@
 import java.text.DecimalFormat;
 
+import minerals.Mineral;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -115,9 +117,17 @@ public class WorldView extends BasicGameState {
 	private void drawSpaceObjectStats(SpaceObject obj, Graphics g){
 		DecimalFormat fm = new DecimalFormat("#.##");
 		if(obj instanceof Planet){
+			int heightCount = 0;
+			int cX = obj.getX() + obj.getRadius();
+			int cY = obj.getY() - obj.getRadius();
 			String temp = fm.format(((Planet) obj).getTemperature() - 273) + "°C";
 			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
-			g.drawString("Oxygen: " + ((Planet)obj).hasOxygen(), obj.getX() + obj.getRadius(), obj.getY() - obj.getRadius() + g.getFont().getLineHeight());
+			heightCount++;
+			g.drawString("Oxygen: " + ((Planet)obj).hasOxygen(), cX, cY + g.getFont().getLineHeight());
+			for(Mineral mrl : ((Planet) obj).getMinerals()){
+			g.drawString(mrl.getName(), cX, cY + heightCount*g.getFont().getLineHeight());
+			heightCount++;
+			}
 		}else{
 			String temp = fm.format(((Star) obj).getTemperature() - 273) + "°C";
 			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
