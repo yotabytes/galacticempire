@@ -9,9 +9,10 @@ public class Planet extends SpaceObject {
 	private int radius; //radius of the Planet
 	private ArrayList<Mineral> Minerals;
 	private boolean oxygen;
-	final static int MAX_RADIUS = 100;
-	final static int MIN_RADIUS = 10;
-
+	public final static int MAX_RADIUS = 100;
+	public final static int MIN_RADIUS = 10;
+	public final static int TEMPERATURE_MULTIPLIER = 837818;
+	private double temperature;
 	public Planet(int x, int y, int radius) {
 		super(x, y, radius);
 		if (radius > MAX_RADIUS)
@@ -20,7 +21,7 @@ public class Planet extends SpaceObject {
 			this.radius = MIN_RADIUS;
 		else
 			this.radius = radius;
-
+		
 	}
 
 	public int getRadius() {
@@ -41,6 +42,14 @@ public class Planet extends SpaceObject {
 	
 	public String getDescription() {
 		return "A planet that may contain valuable resources to extract. Various dangers may reside on and below the surface.";
+	}
+	
+	public void setTemperature(double temperature){
+		this.temperature = temperature;
+	}
+
+	public double getTemperature() {
+		return this.temperature;
 	}
 	
 }

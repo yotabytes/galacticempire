@@ -10,7 +10,7 @@ public class Star extends SpaceObject {
 	private int radius;
 	public final static int MAX_RADIUS = 100;
 	public final static int MIN_RADIUS = 10;
-	
+	private final double temperature;
 	public Star(int x, int y, int radius) {
 		super(x, y, radius);
 		if (radius > MAX_RADIUS)
@@ -19,6 +19,7 @@ public class Star extends SpaceObject {
 			this.radius = MIN_RADIUS;
 		else
 			this.radius = radius;
+		this.temperature = Math.pow(this.radius,3);
 	}
 
 	public int getRadius() {
@@ -28,6 +29,11 @@ public class Star extends SpaceObject {
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
+	
+	public double getTemperature(){
+		return this.temperature;
+	}
+	
 	
 	public String getDescription() {
 		return "A star that emits light and warmth";

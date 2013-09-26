@@ -18,7 +18,8 @@ public class WorldGenerator {
 	
 	// constants:
 	
-	final static int MIN_STAR_DISTANCE = 50;
+	final static int MIN_STAR_DISTANCE = 400;
+	final static int MIN_PLANET_DISTANCE = 100;
 	
 	// Variables:
 	
@@ -92,10 +93,13 @@ public class WorldGenerator {
 		generateStars(starDensity);
 		generatePlanets(planetDensity);
 		addMinerals(mineralDensity);
+		for(Planet plt : this.getPlanets()){
+			System.out.println(plt.getTemperature());
+		}
 	}
 	
 	private void generateStars(double starDensity){
-		int starCount = (int) (starDensity * getWidth() * getHeight() / Star.MAX_RADIUS + 1); // number of stars (minimum 1!).
+		int starCount = (int) (((starDensity * getWidth() * getHeight()) / (Star.MAX_RADIUS * Star.MAX_RADIUS)) + 1); // number of stars (minimum 1!).
 		Collection<Star> newStars = new ArrayList<Star>();
 		
 		Random randomGenerator = new Random();
@@ -115,9 +119,36 @@ public class WorldGenerator {
 	}
 	
 	private void generatePlanets(double planetDensity){
+		int planetCount = (int)(((planetDensity * getWidth() * getHeight()) / (Planet.MAX_RADIUS * Planet.MAX_RADIUS)) + 1);
+		Collection<Planet> newPlanets = new ArrayList<Planet>();
 		
+		Random randomGenerator = new Random();
+		for(int i = 0; i < planetCount; i++){
+			int rX, rY, rR;
+			Planet newPlanet;
+			do {
+				rX = randomGenerator.nextInt(getWidth() - 2 * Planet.MAX_RADIUS) + Planet.MAX_RADIUS;
+				rY = randomGenerator.nextInt(getHeight() - 2 * Planet.MAX_RADIUS) + Planet.MAX_RADIUS;
+				rR = randomGenerator.nextInt(Star.MAX_RADIUS - Planet.MIN_RADIUS) + Planet.MIN_RADIUS;
+				newPlanet = new Planet(rX,rY,rR);
+			} while (!isSpawnablePlanet(newPlanets, newPlanet));
+			newPlanets.add(newPlanet);
+			double temp = 0;
+			for(Star str : this.getStars()){
+				temp += (str.getRadius()/(Math.pow((str.getDistanceBetween(newPlanet.getX(), newPlanet.getY()) - str.getRadius() - newPlanet.getRadius()),2))) * Planet.TEMPERATURE_MULTIPLIER;
+			}
+			newPlanet.setTemperature(temp);
+		}
+		
+		this.setPlanets(newPlanets);
 	}
 	
+	private boolean isSpawnablePlanet(Collection<Planet> newPlanets,
+			Planet newPlanet) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 	private void addMinerals(double mineralDensity){
 		
 	}
