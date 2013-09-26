@@ -21,7 +21,7 @@ public class WorldGenerator {
 	public final static int MIN_STAR_STAR_DISTANCE = 400;
 	public final static int MIN_PLANET_PLANET_DISTANCE = 150;
 	public final static int MIN_STAR_PLANET_DISTANCE = 200;
-	
+	public final static int WORLD_OFFSET = 100;
 	// Variables:
 	
 	/**
@@ -108,8 +108,8 @@ public class WorldGenerator {
 			int rX, rY, rR;
 			Star newStar;
 			do {
-				rX = randomGenerator.nextInt(getWidth() - 2 * Star.MAX_RADIUS) + Star.MAX_RADIUS;
-				rY = randomGenerator.nextInt(getHeight() - 2 * Star.MAX_RADIUS) + Star.MAX_RADIUS;
+				rX = randomGenerator.nextInt(getWidth() - 2 * Star.MAX_RADIUS - WORLD_OFFSET) + Star.MAX_RADIUS;
+				rY = randomGenerator.nextInt(getHeight() - 2 * Star.MAX_RADIUS - WORLD_OFFSET) + Star.MAX_RADIUS;
 				rR = randomGenerator.nextInt(Star.MAX_RADIUS - Star.MIN_RADIUS) + Star.MIN_RADIUS;
 				newStar = new Star(rX,rY,rR);
 			} while (!isSpawnableStar(newStars, newStar));
@@ -128,8 +128,8 @@ public class WorldGenerator {
 			int rX, rY, rR;
 			Planet newPlanet;
 			do {
-				rX = randomGenerator.nextInt(getWidth() - 2 * Planet.MAX_RADIUS) + Planet.MAX_RADIUS;
-				rY = randomGenerator.nextInt(getHeight() - 2 * Planet.MAX_RADIUS) + Planet.MAX_RADIUS;
+				rX = randomGenerator.nextInt(getWidth() - 2 * Planet.MAX_RADIUS - WORLD_OFFSET ) + Planet.MAX_RADIUS;
+				rY = randomGenerator.nextInt(getHeight() - 2 * Planet.MAX_RADIUS - WORLD_OFFSET) + Planet.MAX_RADIUS;
 				rR = randomGenerator.nextInt(Planet.MAX_RADIUS - Planet.MIN_RADIUS) + Planet.MIN_RADIUS;
 				newPlanet = new Planet(rX,rY,rR);
 			} while (!isSpawnablePlanet(newPlanets, newPlanet));
