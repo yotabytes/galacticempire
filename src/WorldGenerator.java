@@ -7,6 +7,8 @@ import spaceobject.Star;
 
 import java.util.Random;
 
+import minerals.Mineral;
+
 import org.newdawn.slick.SlickException;
 
 
@@ -167,9 +169,43 @@ public class WorldGenerator {
 	}
 
 	private void addMinerals(double mineralDensity){
+		int mineralCount = (int) (planets.size() * mineralDensity);
 		
+		// construct mineral pool
+		
+		Collection<Mineral> mineralPool = new ArrayList<Mineral>();
+		
+		for (Mineral mineral: Mineral.values()){
+			int timesInPool = (int) (mineralCount*mineral.getRarity());
+			if (timesInPool == 0)
+				timesInPool = 1; // make sure every mineral is added at least once into the pool.
+			for (int i=0; i< timesInPool; i++)
+				mineralPool.add(mineral);
+		}
+		
+		// divide mineral pool over planets
+		
+		for (Mineral mineral : mineralPool){
+			ArrayList<Planet> possiblePlanets = new ArrayList<Planet>();
+			for (Planet planet : getPlanets()){
+				// Planets must satisfy the constraints and must not already contain the mineral.
+				if (mineral.HasSatisfiedConstraints(planet) && !(planet.getMinerals().contains(mineral))) 
+					possiblePlanets.add(planet);
+			}
+			
+			// if there is no suitable planet remove the mineral from the pool and start next iteration.
+			
+			if (possiblePlanets.isEmpty()){
+				continue;
+			}
+			
+			// pick random planet and add current mineral to that planet.
+			
+			Random randomGenerator = new Random();
+			int randomIndex = randomGenerator.nextInt(possiblePlanets.size());
+			possiblePlanets.get(randomIndex).addMineral(mineral);
+		}
 	}
-	
 	
 	/*
 	 * Stars can only spawn if there is a certain distance between the closest other star.

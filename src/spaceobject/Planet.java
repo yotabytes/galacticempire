@@ -1,6 +1,7 @@
 package spaceobject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.newdawn.slick.Image;
 
@@ -9,8 +10,9 @@ import minerals.Mineral;
 public class Planet extends SpaceObject {
 	
 	private int radius; //radius of the Planet
-	private ArrayList<Mineral> Minerals;
+	private Collection<Mineral> Minerals;
 	private boolean oxygen;
+
 	private boolean isLivable;
 	public final static int COLD_PLANET_TRESHOLD = 100;
 	public final static int HOT_PLANET_TRESHOLD = 1000;
@@ -20,17 +22,9 @@ public class Planet extends SpaceObject {
 	public final static int MIN_RADIUS = 10;
 	public final static int TEMPERATURE_MULTIPLIER = 837818;
 	private double temperature;
-	public Planet(int x, int y, int radius) {
-		super(x, y, radius);
-		if (radius > MAX_RADIUS)
-			this.radius = MAX_RADIUS;
-		else if (radius < MIN_RADIUS)
-			this.radius = MIN_RADIUS;
-		else
-			this.radius = radius;
-		
-	}
 
+	// getters and setters:
+	
 	public int getRadius() {
 		return radius;
 	}
@@ -39,6 +33,14 @@ public class Planet extends SpaceObject {
 		this.radius = radius;
 	}
 	
+	public Collection<Mineral> getMinerals() {
+		return Minerals;
+	}
+
+	public void setMinerals(Collection<Mineral> minerals) {
+		Minerals = minerals;
+	}
+
 	public void addMineral(Mineral source) {
 		(this.Minerals).add(source);
 	}
@@ -68,6 +70,19 @@ public class Planet extends SpaceObject {
 	
 	public boolean isLivable(){
 		return isLivable;
+	}
+	
+	// constructors and other code
+	
+	public Planet(int x, int y, int radius) {
+		super(x, y, radius);
+		if (radius > MAX_RADIUS)
+			this.radius = MAX_RADIUS;
+		else if (radius < MIN_RADIUS)
+			this.radius = MIN_RADIUS;
+		else
+			this.radius = radius;
+		this.setMinerals(new ArrayList<Mineral>());
 	}
 	
 }
