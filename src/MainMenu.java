@@ -33,6 +33,8 @@ public class MainMenu extends BasicGameState {
 			throws SlickException {
 		if (gc.getInput().isKeyPressed(Input.KEY_1))
 			sbg.enterState(1);
+		if (gc.getInput().isKeyPressed(Input.KEY_3))
+			gc.exit();
 		
 	}
 

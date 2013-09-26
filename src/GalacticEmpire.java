@@ -17,7 +17,7 @@ public class GalacticEmpire extends StateBasedGame {
 	
 	public static void main(String Args[]) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new GalacticEmpire("Galactic Empire"));
-		app.setDisplayMode(1920, 1080, true);
+		app.setDisplayMode(800, 600, false);
 		app.start();
 	}
 

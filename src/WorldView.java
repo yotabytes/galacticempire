@@ -23,7 +23,7 @@ public class WorldView extends BasicGameState {
 	private Image planet;
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.generator = new WorldGenerator(4000,4000,0.01,0.005,3);
+		this.generator = new WorldGenerator(2000,2000,0.01,0.005,3);
 		this.world = generator.getWorld();
 		this.background = new Image("img/spacebackground.png");
 		this.star = new Image("img/planet-2.png");
@@ -55,6 +55,11 @@ public class WorldView extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)throws SlickException {
+		// key input actions:
+		trackCameraMovement(gc,sbg, arg2);
+	}
+	
+	private void trackCameraMovement(GameContainer gc, StateBasedGame sbg, int arg2){
 		if(gc.getInput().isKeyDown(Input.KEY_RIGHT)){
 			this.offsetX += -DEFAULT_OFFSET; 
 		}

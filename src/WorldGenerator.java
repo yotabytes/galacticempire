@@ -23,7 +23,8 @@ public class WorldGenerator {
 	public final static int MIN_STAR_STAR_DISTANCE = 400;
 	public final static int MIN_PLANET_PLANET_DISTANCE = 150;
 	public final static int MIN_STAR_PLANET_DISTANCE = 200;
-	public final static int WORLD_OFFSET = 100;
+	public final static int WORLD_OFFSET = 50;
+	
 	// Variables:
 	
 	/**
@@ -80,9 +81,8 @@ public class WorldGenerator {
 	 * 			The width of this planet.
 	 * @param 	planetDensity
 	 * 			The number of planets per square with a size of maximum planet radius x maximum planet radius.
-	 * 			Capped between 0.1 and 0.5.
 	 * @param 	starDensity
-	 * 			The number of stars per square with a size of maximum planet radius x maximum planet radius. Capped between 0.05 and 0.1.
+	 * 			The number of stars per square with a size of maximum planet radius x maximum planet radius. 
 	 * @param 	mineralDensity
 	 * 			The number of minerals per planet available in this world. capped between 1 and 5.
 	 * @throws SlickException 
@@ -98,9 +98,11 @@ public class WorldGenerator {
 		generateStars(starDensity);
 		generatePlanets(planetDensity);
 		addMinerals(mineralDensity);
+		/* Debug information.
 		for(Planet plt : this.getPlanets()){
 			System.out.println(plt.getTemperature());
 		}
+		*/
 	}
 	
 	private void generateStars(double starDensity){
@@ -111,9 +113,9 @@ public class WorldGenerator {
 		for (int i=0; i<starCount; i++){
 			int rX, rY, rR;
 			Star newStar;
-			do {
-				rX = randomGenerator.nextInt(getWidth() - 2 * Star.MAX_RADIUS - WORLD_OFFSET) + Star.MAX_RADIUS;
-				rY = randomGenerator.nextInt(getHeight() - 2 * Star.MAX_RADIUS - WORLD_OFFSET) + Star.MAX_RADIUS;
+			do { // find suitable location
+				rX = randomGenerator.nextInt(getWidth() - 2 * Star.MAX_RADIUS - 2 * WORLD_OFFSET) + Star.MAX_RADIUS + WORLD_OFFSET;
+				rY = randomGenerator.nextInt(getHeight() - 2 * Star.MAX_RADIUS - 2 * WORLD_OFFSET) + Star.MAX_RADIUS + WORLD_OFFSET;
 				rR = randomGenerator.nextInt(Star.MAX_RADIUS - Star.MIN_RADIUS) + Star.MIN_RADIUS;
 				newStar = new Star(rX,rY,rR);
 			} while (!isSpawnableStar(newStars, newStar));
@@ -131,9 +133,9 @@ public class WorldGenerator {
 		for(int i = 0; i < planetCount; i++){
 			int rX, rY, rR;
 			Planet newPlanet;
-			do {
-				rX = randomGenerator.nextInt(getWidth() - 2 * Planet.MAX_RADIUS - WORLD_OFFSET ) + Planet.MAX_RADIUS;
-				rY = randomGenerator.nextInt(getHeight() - 2 * Planet.MAX_RADIUS - WORLD_OFFSET) + Planet.MAX_RADIUS;
+			do { // find suitable location
+				rX = randomGenerator.nextInt(getWidth() - 2 * Planet.MAX_RADIUS - 2 * WORLD_OFFSET ) + Planet.MAX_RADIUS + WORLD_OFFSET;
+				rY = randomGenerator.nextInt(getHeight() - 2 * Planet.MAX_RADIUS - 2 * WORLD_OFFSET) + Planet.MAX_RADIUS + WORLD_OFFSET;
 				rR = randomGenerator.nextInt(Planet.MAX_RADIUS - Planet.MIN_RADIUS) + Planet.MIN_RADIUS;
 				newPlanet = new Planet(rX,rY,rR);
 			} while (!isSpawnablePlanet(newPlanets, newPlanet));
@@ -170,7 +172,7 @@ public class WorldGenerator {
 	
 	
 	/*
-	 * Space objects can only if there is a certain distance between the closest other spaceobject.
+	 * Stars can only spawn if there is a certain distance between the closest other star.
 	 */
 	private boolean isSpawnableStar(Collection<Star> stars, Star newStar){
 		boolean isSpawnable = true;
