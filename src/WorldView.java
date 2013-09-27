@@ -18,6 +18,7 @@ import spaceobject.Star;
 
 public class WorldView extends BasicGameState {
 	private static final int DEFAULT_OFFSET = 5;
+	private static final int X_AXIS_INDEXATION = 10;
 	private int offsetX = 0;
 	private int offsetY = 0;
 	private World world; //The world this view is connected to
@@ -27,7 +28,7 @@ public class WorldView extends BasicGameState {
 	private float backgroundScale;
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.generator = new WorldGenerator(4000,4000,0.01,0.005,3);
+		this.generator = new WorldGenerator(4000,4000,0.01,0.005,2);
 		this.world = generator.getWorld();
 		this.background = new Image("img/spacebackground.png");
 		if(world.getHeight() > world.getWidth()){
@@ -53,7 +54,7 @@ public class WorldView extends BasicGameState {
 		// key input actions:
 		trackCameraMovement(gc,sbg, arg2);
 	}
-	
+
 	private void checkMouseOver(Input input, Graphics g) {
 		int mX = input.getMouseX();
 		int mY = input.getMouseY();
@@ -63,7 +64,7 @@ public class WorldView extends BasicGameState {
 				drawSpaceObjectStats(obj, g);
 			}
 		}
-		
+
 	}
 
 	private void trackCameraMovement(GameContainer gc, StateBasedGame sbg, int arg2){
@@ -92,7 +93,7 @@ public class WorldView extends BasicGameState {
 			offsetY = 0;
 		}
 	}
-	
+
 	private void drawPlanets(){
 		for(Planet plt : world.getPlanets()){
 			float scale = ((float)2*plt.getRadius() / (float)plt.getImage().getHeight());
@@ -105,7 +106,7 @@ public class WorldView extends BasicGameState {
 			str.getImage().draw(str.getX() - str.getRadius(), str.getY() - str.getRadius(), scale);
 		}
 	}
-	
+
 	private boolean mouseOnSpaceObject(SpaceObject obj, int mouseX, int mouseY){
 		if(obj.getDistanceBetween(mouseX - offsetX, mouseY - offsetY) < obj.getRadius()){
 			return true;
@@ -113,26 +114,39 @@ public class WorldView extends BasicGameState {
 			return false;
 		}
 	}
-		
+
 	private void drawSpaceObjectStats(SpaceObject obj, Graphics g){
 		DecimalFormat fm = new DecimalFormat("#.##");
 		if(obj instanceof Planet){
-			int heightCount = 0;
 			int cX = obj.getX() + obj.getRadius();
 			int cY = obj.getY() - obj.getRadius();
-			String temp = fm.format(((Planet) obj).getTemperature() - 273) + "°C";
-			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
-			heightCount++;
-			g.drawString("Oxygen: " + ((Planet)obj).hasOxygen(), cX, cY + g.getFont().getLineHeight());
+			int yIndent = g.getFont().getLineHeight();
+			String hasOxygen;
+			if(((Planet) obj).hasOxygen()){
+				hasOxygen = "yes";
+			}else{
+				hasOxygen = "no";
+			}
+			//Draw temperature
+			String temp = fm.format(((Planet) obj).getTemperature() - SpaceObject.KELVIN_CONSTANT) + "°C";
+			g.drawString(temp,cX,cY);
+			//Draw oxygen
+			g.drawString("Oxygen: " + hasOxygen, cX, cY + yIndent);
+			yIndent += g.getFont().getLineHeight();
+			//Draw Minerals
+			g.setColor(Color.yellow);
+			g.drawString("Minerals:", cX, cY + yIndent);
+			yIndent += g.getFont().getLineHeight();
+			cX += X_AXIS_INDEXATION;	// X axis indentation on screen
 			for(Mineral mrl : ((Planet) obj).getMinerals()){
-			g.drawString(mrl.getName(), cX, cY + heightCount*g.getFont().getLineHeight());
-			heightCount++;
+				g.drawString(mrl.getName(), cX, cY + yIndent);
+				yIndent += g.getFont().getLineHeight();
 			}
 		}else{
-			String temp = fm.format(((Star) obj).getTemperature() - 273) + "°C";
+			String temp = fm.format(((Star) obj).getTemperature() - SpaceObject.KELVIN_CONSTANT) + "°C";
 			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
 		}
-		
+
 	}
 	@Override
 	public int getID() {

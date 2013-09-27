@@ -12,7 +12,7 @@ public class Planet extends SpaceObject {
 	private int radius; //radius of the Planet
 	private Collection<Mineral> Minerals;
 	private boolean oxygen;
-
+	
 	private boolean isLivable;
 	public final static int COLD_PLANET_TRESHOLD = 100;
 	public final static int HOT_PLANET_TRESHOLD = 1000;

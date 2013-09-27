@@ -5,7 +5,7 @@ import org.newdawn.slick.Image;
 
 
 public abstract class SpaceObject {
-	
+	public static final double KELVIN_CONSTANT = 273.15;
 	private int x, y;
 	private int radius;
 	private Image image;
