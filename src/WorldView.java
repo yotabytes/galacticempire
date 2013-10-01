@@ -26,6 +26,7 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import spaceobject.CelestialBody;
 import spaceobject.Planet;
 import spaceobject.SpaceObject;
 import spaceobject.Star;
@@ -163,8 +164,9 @@ public class WorldView extends BasicGameState {
 		int mY = input.getMouseY();
 		for(SpaceObject obj : world.getSpaceObjects()){
 			if(mouseOnSpaceObject(obj,mX,mY)){
-				g.drawOval(obj.getX() - obj.getRadius(), obj.getY() - obj.getRadius(), 2*obj.getRadius(), 2*obj.getRadius());
-				drawSpaceObjectStats(obj, g);
+				if (obj instanceof CelestialBody)
+					g.drawOval(obj.getX() - ((CelestialBody)obj).getRadius(), obj.getY() - ((CelestialBody)obj).getRadius(), 2*((CelestialBody)obj).getRadius(), 2*((CelestialBody)obj).getRadius());
+					drawCelestialBodyStats((CelestialBody)obj, g);
 			}
 		}
 
@@ -176,7 +178,7 @@ public class WorldView extends BasicGameState {
 	 * @param obj
 	 * @param g
 	 */
-	private void drawSpaceObjectStats(SpaceObject obj, Graphics g){
+	private void drawCelestialBodyStats(CelestialBody obj, Graphics g){
 		DecimalFormat fm = new DecimalFormat("#.##");
 		if(obj instanceof Planet){
 			int cX = obj.getX() + obj.getRadius();
@@ -189,7 +191,7 @@ public class WorldView extends BasicGameState {
 				hasOxygen = "no";
 			}
 			//Draw temperature
-			String temp = fm.format(((Planet) obj).getTemperature() - SpaceObject.KELVIN_CONSTANT) + "°C";
+			String temp = fm.format(((Planet) obj).getTemperature() - CelestialBody.KELVIN_CONSTANT) + "°C";
 			g.drawString(temp,cX,cY);
 			//Draw oxygen yes/no
 			g.drawString("Oxygen: " + hasOxygen, cX, cY + yIndent);
@@ -204,7 +206,7 @@ public class WorldView extends BasicGameState {
 				yIndent += g.getFont().getLineHeight();
 			}
 		}else{
-			String temp = fm.format(((Star) obj).getTemperature() - SpaceObject.KELVIN_CONSTANT) + "°C";
+			String temp = fm.format(((Star) obj).getTemperature() - CelestialBody.KELVIN_CONSTANT) + "°C";
 			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
 		}
 	}
@@ -258,10 +260,15 @@ public class WorldView extends BasicGameState {
 	 * @return true if the distance between the object and the mouse is smaller than its radius.
 	 */
 	private boolean mouseOnSpaceObject(SpaceObject obj, int mouseX, int mouseY){
-		if(obj.getDistanceBetween(mouseX - offsetX, mouseY - offsetY) < obj.getRadius()){
-			return true;
-		}else{
-			return false;
+		if (obj instanceof CelestialBody){
+			if(obj.getDistanceBetween(mouseX - offsetX, mouseY - offsetY) < ((CelestialBody) obj).getRadius()){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		else {
+			return false; // temporary return false until other space object methods are included.
 		}
 	}
 

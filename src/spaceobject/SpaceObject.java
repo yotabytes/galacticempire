@@ -5,15 +5,12 @@ import org.newdawn.slick.Image;
 
 
 public abstract class SpaceObject {
-	public static final double KELVIN_CONSTANT = 273.15;
 	private int x, y;
-	private int radius;
 	private Image image;
 	
-	public SpaceObject(int x, int y, int radius) {
+	public SpaceObject(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.radius = radius;
 	}
 	
 	public int getX() {
@@ -27,12 +24,6 @@ public abstract class SpaceObject {
 	}
 	public void setY(int y) {
 		this.y = y;
-	}
-	public int getRadius(){
-		return radius;
-	}
-	public void setRadius(int radius){
-		this.radius = radius;
 	}
 	
 	/**
