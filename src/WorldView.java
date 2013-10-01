@@ -56,58 +56,13 @@ public class WorldView extends BasicGameState {
 			this.greatestScreenSize = world.getWidth();
 		} 
 		this.backgroundScale = (float)greatestScreenSize / (float)background.getHeight();
-		/*
+		
 		nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), new LwjglInputSystem(), new AccurateTimeProvider());
 		nifty.loadStyleFile("nifty-default-styles.xml");
 		nifty.loadControlFile("nifty-default-controls.xml");
-		*/
-/*
- * EXAMPLE OF SCREEN
-		Screen mainScreen = new ScreenBuilder("main") {{
-			controller(new ScreenControllerExample());
-			layer(new LayerBuilder("layer") {{
-				childLayoutCenter();
-				panel(new PanelBuilder("dialog-parent"){{
-					height("200px");
-					width("200px");
-					style("nifty-panel");
-					align(Align.Center);
-					valign(VAlign.Center);
-					childLayoutVertical();
-					control(new ButtonBuilder("SelGrpBt"){{
-						label("Select Group");
-						width("120px");
-						height("40px");
-						align(Align.Center);
-					}});
-					control(new ButtonBuilder("SelDngBt"){{
-						label("Select Dungeon");
-						width("120px");
-						height("40px");
-						align(Align.Center);
-					}});
-					control(new ButtonBuilder("Options"){{
-						label("Options");
-						width("120px");
-						height("40px");
-						align(Align.Center);
-					}});
-					control(new ButtonBuilder("ExitGame"){{
-						label("Exit Game");
-						width("120px");
-						height("40px");
-						align(Align.Center);
-					}});
-
-				}});
-
-
-			}});
-		}}.build(nifty);
-
-		nifty.addScreen("mainScreen", mainScreen);
-		nifty.gotoScreen("mainScreen"); 
- */
+		
+		nifty.fromXml("xml/MainHUD.xml","hud", new ScreenControllerExample());
+		
 	}
 
 	@Override
@@ -119,11 +74,11 @@ public class WorldView extends BasicGameState {
 		drawStars();
 		checkMouseOver(gc.getInput(), g);
 		
-		/*
+		
 		SlickCallable.enterSafeBlock();
 		nifty.render(false);
 		SlickCallable.leaveSafeBlock();
-		*/
+		
 	}
 
 	@Override
@@ -272,7 +227,7 @@ public class WorldView extends BasicGameState {
 		return 1;
 	}
 }
-/*
+
 class ScreenControllerExample implements ScreenController {
 	public void bind(Nifty arg0, Screen arg1) {}
 	public void onEndScreen() {}
@@ -283,4 +238,4 @@ class ScreenControllerExample implements ScreenController {
 		System.out.println("Clicou");
 	}
 }
-	*/
+	
