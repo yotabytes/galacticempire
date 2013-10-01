@@ -27,8 +27,7 @@ public enum Mineral {
 	}, COPPER("Copper", 0.2) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
-			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 	}
 	, QUARTS("Quartz", 0.1) {

@@ -19,7 +19,11 @@ public class ImageFactory {
 	private static final String LIVABLE_PLANET_3 = "img/planet-12.png";
 	private static final String NOT_LIVABLE_PLANET_2 = "img/planet-13.png";
 	private static final String RARE_PLANET = "img/planet15.png";
+	private static final String BACKGROUND = "img/spacebackground.png";
 	
+	public static Image getBackground() throws SlickException{
+		return new Image(BACKGROUND);
+	}
 	
 	public static Image getImage(Object object) throws SlickException{
 		if(object instanceof Planet)

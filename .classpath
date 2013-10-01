@@ -12,5 +12,29 @@
 	<classpathentry kind="lib" path="Libraries/lwjgl-2.8.5/jar/jinput.jar"/>
 	<classpathentry kind="lib" path="Libraries/lwjgl-2.8.5/jar/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="Libraries/lwjgl-2.8.5/jar/lwjgl_test.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-default-controls-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-default-controls-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-html-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-html-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-java2d-renderer-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-java2d-renderer-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-jogl-renderer-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-jogl-renderer-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-lwjgl-renderer-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-lwjgl-renderer-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-openal-soundsystem-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-openal-soundsystem-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-pauls-soundsystem-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-pauls-soundsystem-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-slick-renderer-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-slick-renderer-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-style-black-1.3.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="Libraries/nifty-style-black-1.3.3.jar"/>
+	<classpathentry kind="lib" path="Libraries/eventbus-1.4.jar"/>
+	<classpathentry kind="lib" path="Libraries/xpp3_xpath-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="Libraries/xmlpull_1_1_3_1.jar"/>
+	<classpathentry kind="lib" path="Libraries/xpp3_min-1.1.3.4-RC8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
