@@ -30,6 +30,8 @@ import spaceobject.CelestialBody;
 import spaceobject.Planet;
 import spaceobject.SpaceObject;
 import spaceobject.Star;
+import spaceobject.ship.ExplorerShip;
+import spaceobject.ship.Ship;
 
 
 public class WorldView extends BasicGameState {
@@ -73,7 +75,9 @@ public class WorldView extends BasicGameState {
 		background.draw(0,0,backgroundScale);
 		drawPlanets();
 		drawStars();
+		drawShips();
 		checkMouseOver(gc.getInput(), g);
+		
 		
 		g.resetTransform(); //Make sure that the user interface stays on the screen and does not translate with the world while scrolling around.
 		SlickCallable.enterSafeBlock();
@@ -85,6 +89,9 @@ public class WorldView extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)throws SlickException {
 		// key input actions:
+		for(Ship shp : world.getShips()){
+			shp.move(arg2);
+		}
 		trackCameraMovement(gc,sbg, arg2);
 	}
 
@@ -105,6 +112,15 @@ public class WorldView extends BasicGameState {
 		for(Star str : world.getStars()){
 			float scale = ((float)2*str.getRadius() / (float)str.getImage().getHeight());
 			str.getImage().draw(str.getX() - str.getRadius(), str.getY() - str.getRadius(), scale);
+		}
+	}
+	/**
+	 * General function for drawing the stars in the world on the screen.
+	 */
+	private void drawShips() {
+		for(Ship shp : world.getShips()){
+			float scale = ((float)ExplorerShip.EXPLORER_SHIP_SIZE / (float)shp.getImage().getHeight());
+			shp.getImage().draw(shp.getX(), shp.getY(),scale);
 		}
 	}
 
@@ -136,11 +152,12 @@ public class WorldView extends BasicGameState {
 	private void drawCelestialBodyStats(CelestialBody obj, Graphics g){
 		DecimalFormat fm = new DecimalFormat("#.##");
 		if(obj instanceof Planet){
-			int cX = obj.getX() + obj.getRadius();
-			int cY = obj.getY() - obj.getRadius();
+			float cX = obj.getX() + obj.getRadius();
+			float cY = obj.getY() - obj.getRadius();
 			int yIndent = g.getFont().getLineHeight();
 			String hasOxygen;
 			String hasWater;
+			String isLivable;
 			if(((Planet) obj).hasOxygen()){
 				hasOxygen = "yes";
 			}else{
@@ -151,6 +168,11 @@ public class WorldView extends BasicGameState {
 			}else{
 				hasWater = "no";
 			}
+			if(((Planet) obj).isLivable()){
+				isLivable = "yes";
+			}else{
+				isLivable = "no";
+			}
 			//Draw temperature
 			String temp = fm.format(((Planet) obj).getTemperature() - CelestialBody.KELVIN_CONSTANT) + "°C";
 			g.drawString(temp,cX,cY);
@@ -159,6 +181,10 @@ public class WorldView extends BasicGameState {
 			yIndent += g.getFont().getLineHeight();
 			//Draw water yes/no
 			g.drawString("Water: " + hasWater, cX, cY + yIndent);
+			yIndent += g.getFont().getLineHeight();
+			//Draw isLivable yes/no
+			g.setColor(Color.green);
+			g.drawString("Livable: " + isLivable, cX, cY + yIndent);
 			yIndent += g.getFont().getLineHeight();
 			//Draw Minerals
 			g.setColor(Color.yellow);

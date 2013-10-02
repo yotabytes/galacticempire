@@ -5,24 +5,24 @@ import org.newdawn.slick.Image;
 
 
 public abstract class SpaceObject {
-	private int x, y;
+	private float x, y;
 	private Image image;
 	
-	public SpaceObject(int x, int y) {
+	public SpaceObject(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
-	public int getY() {
+	public float getY() {
 		return y;
 	}
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 	
@@ -39,7 +39,7 @@ public abstract class SpaceObject {
 	 * 			| Math.sqrt(Math.pow(this.getX() - x ,2)
 	 * 			| 		 +	Math.pow(this.getY() - y ,2))	
 	 */
-	public double getDistanceBetween(double x, double y){
+	public double getDistanceBetween(float x, float y){
 		double distance = 0.0;
 		distance = Math.sqrt(Math.pow(this.getX() - x,2) + Math.pow(this.getY() - y, 2));
 		return distance;

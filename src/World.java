@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import spaceobject.*;
+import spaceobject.ship.Ship;
 
 /**
  * Contains methods to manipulate and verify the objects in the world, also used to pass to the rendering in WorldView.
@@ -25,11 +26,15 @@ public class World {
 	/**
 	 * Holds all planets of this world.
 	 */
-	Collection<Planet> planets;
+	private Collection<Planet> planets;
 	/**
 	 * Holds all stars of this world.
 	 */
-	Collection<Star> stars;
+	private Collection<Star> stars;
+	/**
+	 * Holds all ships of this world.
+	 */
+	private Collection<Ship> ships;
 	
 	// Getters and setters:
 	
@@ -49,10 +54,15 @@ public class World {
 		return stars;
 	}
 	
+	public Collection<Ship> getShips() {
+		return ships;
+	}
+	
 	public Collection<SpaceObject> getSpaceObjects() {
 		Collection<SpaceObject> allObjects = new ArrayList<SpaceObject>();
 		allObjects.addAll(planets);
 		allObjects.addAll(stars);
+		allObjects.addAll(ships);
 		return allObjects;
 	}
 
@@ -64,12 +74,14 @@ public class World {
 	 * @param 	height
 	 * @param	planets
 	 * @param	stars
+	 * @param 	ships
 	 */
-	public World(int width, int height, Collection<Planet> planets, Collection<Star> stars){
+	public World(int width, int height, Collection<Planet> planets, Collection<Star> stars, Collection<Ship> ships){
 		this.width = width;
 		this.height = height;
 		this.planets = planets;
 		this.stars = stars;
+		this.ships = ships;
 	}
 	
 }

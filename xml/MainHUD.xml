@@ -10,7 +10,7 @@
 </screen>
 <screen id="hud">
     <layer id="background" childLayout="center">
-    	 <image filename="img/primitiveHUD.png"></image>
+    	 <image filename="img/HUD.PNG"></image>
     </layer>
     <layer id="foreground" childLayout="horizontal">
      <panel id="textarea1" width="80%" height="20%" childLayout="vertical" >  

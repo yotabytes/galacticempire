@@ -42,13 +42,16 @@ public class WorldGenerator {
 	/**
 	 * Holds all planets of this world.
 	 */
-	Collection<Planet> planets;
+	private Collection<Planet> planets;
 	/**
 	 * Holds all stars of this world.
 	 */
-	Collection<Star> stars;
-	
-	Ship explorer;
+	private Collection<Star> stars;
+		
+	/**
+	 * Holds all ships of this world.
+	 */
+	private Collection<Ship> ships;
 	
 	// Getters and setters:
 	
@@ -68,12 +71,20 @@ public class WorldGenerator {
 		this.stars = stars;
 	}
 
+	public void setShips(Collection<Ship> ships) {
+		this.ships = ships;
+	}
+	
 	public Collection<Planet> getPlanets() {
 		return planets;
 	}
 
 	public Collection<Star> getStars() {
 		return stars;
+	}
+	
+	public Collection<Ship> getShips() {
+		return ships;
 	}
 	
 	
@@ -104,7 +115,7 @@ public class WorldGenerator {
 		generateStars(starDensity);
 		generatePlanets(planetDensity);
 		addMinerals(mineralDensity);
-		addExplorerShip();
+		addShips();
 		/* Debug information.
 		for(Planet plt : this.getPlanets()){
 			System.out.println(plt.getTemperature());
@@ -112,9 +123,10 @@ public class WorldGenerator {
 		*/
 	}
 	
-	private void addExplorerShip() {
-		Random rnd = new Random();
-		this.explorer = new ExplorerShip(0,0);
+	private void addShips() {
+		Collection<Ship> newShips = new ArrayList<Ship>();
+		newShips.add(new ExplorerShip(this.getWidth()/2 , this.getHeight()/2));
+		this.setShips(newShips);
 	}
 
 
@@ -158,9 +170,14 @@ public class WorldGenerator {
 			for(Star str : this.getStars()){
 				temp += (str.getRadius()/(Math.pow((str.getDistanceBetween(newPlanet.getX(), newPlanet.getY()) - str.getRadius() - newPlanet.getRadius()),2))) * Planet.TEMPERATURE_MULTIPLIER;
 			}
-			if (randomGenerator.nextInt(10) < 8)
-				newPlanet.toggleWater(); // 80 percent chance on water on planet
 			newPlanet.setTemperature(temp);
+			// 60% chance on oxygen and not on planets which exceeds the hot planet threshold.
+			if (randomGenerator.nextInt(10) < 6 && newPlanet.getTemperature() < Planet.HOT_PLANET_THRESHOLD){
+				newPlanet.toggleOxygen();
+			}
+			if (randomGenerator.nextInt(10) < 8 && newPlanet.getTemperature() < Planet.HOT_PLANET_THRESHOLD)
+				newPlanet.toggleWater(); // 80 percent chance on water on planet
+			
 		}
 		
 		this.setPlanets(newPlanets);
@@ -248,9 +265,12 @@ public class WorldGenerator {
 		for(Planet plt : this.getPlanets()){
 			plt.setImage(ImageFactory.getImage(plt));
 		}
+		for(Ship shp : this.getShips()){
+			shp.setImage(ImageFactory.getImage(shp));
+		}
 	}
 	public World getWorld() {
-		return new World(this.width, this.height,this.planets, this.stars);
+		return new World(this.width, this.height,this.planets, this.stars, this.ships);
 	}
 	
 	

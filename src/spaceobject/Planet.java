@@ -2,11 +2,7 @@ package spaceobject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-import org.newdawn.slick.Image;
-
 import spaceobject.ship.Ship;
-
 import minerals.Mineral;
 
 public class Planet extends CelestialBody {
@@ -18,7 +14,7 @@ public class Planet extends CelestialBody {
 	private boolean oxygen;
 	private boolean water;
 	
-	public final static int HOT_PLANET_TRESHOLD = 1000;
+	public final static int HOT_PLANET_THRESHOLD = 1000;
 	public final static int MIN_LIVABLE_TEMPERATURE = 253;
 	public final static int MAX_LIVABLE_TEMPERATURE = 323;
 	public final static int MAX_RADIUS = 60;
@@ -67,6 +63,13 @@ public class Planet extends CelestialBody {
 			this.water = false;
 		checkIsLivable();
 	}
+	public void toggleOxygen(){
+		if (!this.hasOxygen())
+			this.oxygen = true;
+		else
+			this.oxygen = false;
+		checkIsLivable();
+	}
 	
 	public String getDescription() {
 		return "A planet that may contain valuable resources to extract. Various dangers may reside on and below the surface.";
@@ -79,7 +82,7 @@ public class Planet extends CelestialBody {
 	}
 	
 	private void checkIsLivable(){
-		if(MIN_LIVABLE_TEMPERATURE < this.getTemperature()  && this.getTemperature() < MAX_LIVABLE_TEMPERATURE && this.hasWater()){
+		if(MIN_LIVABLE_TEMPERATURE < this.getTemperature()  && this.getTemperature() < MAX_LIVABLE_TEMPERATURE && this.hasWater() && this.hasOxygen()){
 			this.isLivable = true;
 		}
 	}

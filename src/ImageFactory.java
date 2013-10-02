@@ -74,7 +74,7 @@ public class ImageFactory {
 			case 0: return new Image(COLD_PLANET);
 			case 1: return new Image(ICE_PLANET);
 			}
-		}else if(object.getTemperature() > Planet.HOT_PLANET_TRESHOLD){
+		}else if(object.getTemperature() > Planet.HOT_PLANET_THRESHOLD){
 			int newCase = rnd.nextInt(2);
 			switch(newCase){
 			case 0: return new Image(DRY_PLANET);
