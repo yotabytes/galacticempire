@@ -52,7 +52,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 	 * Instantiates the world generator which returns a world with random elements and the background of the world. 
 	 */
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.generator = new WorldGenerator(4000,4000,0.01,0.005,2);
+		this.generator = new WorldGenerator(5000,5000,0.01,0.005,2);
 		this.world = generator.getWorld();
 		this.background = ImageFactory.getBackground();
 		this.sbg = sbg;
@@ -95,7 +95,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)throws SlickException {
 		// key input actions:
 		for(Ship shp : world.getShips()){
-			shp.move(arg2);
+			//shp.move(arg2);
 		}
 		trackCameraMovement(gc,sbg, arg2);
 	}

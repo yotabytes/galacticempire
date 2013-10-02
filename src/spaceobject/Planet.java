@@ -2,6 +2,8 @@ package spaceobject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import buildings.Building;
 import spaceobject.ship.Ship;
 import minerals.Mineral;
 
@@ -10,7 +12,8 @@ public class Planet extends CelestialBody {
 	// variables and constants
 	
 	private Collection<Mineral> minerals;
-	private Collection<Ship> ships; // hold references to all ships currently on this planet.
+	private Collection<Ship> ships; // holds references to all ships currently on this planet.
+	private Collection<Building> buildings; // holds references to all buildings currently on this planet.
 	private boolean oxygen;
 	private boolean water;
 	
@@ -33,7 +36,7 @@ public class Planet extends CelestialBody {
 	}
 
 	public void addMineral(Mineral source) {
-		(this.minerals).add(source);
+		getMinerals().add(source);
 	}
 	
 	public Collection<Ship> getShips(){
@@ -45,7 +48,19 @@ public class Planet extends CelestialBody {
 	}
 	
 	public void addShip(Ship source){
-		(this.ships).add(source);
+		getShips().add(source);
+	}
+	
+	public Collection<Building> getBuildings(){
+		return buildings;
+	}
+	
+	public void setBuildings(Collection<Building> newBuildings){
+		this.buildings = newBuildings;
+	}
+	
+	public void addShip(Building source){
+		getBuildings().add(source);
 	}
 
 	public boolean hasOxygen() {
