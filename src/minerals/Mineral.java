@@ -9,7 +9,7 @@ public enum Mineral {
 	
 	// List of minerals with constraints, minerals that get added here will automatically be used in map generation.
 	// The rarity factor can be any positive integer, higher integer means higher frequency.
-	COAL("coal",150) {
+	COAL("Coal",150) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true; // Coal can spawn anywhere.
