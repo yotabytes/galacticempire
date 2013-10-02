@@ -25,6 +25,7 @@ import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.slick2d.NiftyGameState;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 import spaceobject.CelestialBody;
 import spaceobject.Planet;
@@ -34,17 +35,18 @@ import spaceobject.ship.ExplorerShip;
 import spaceobject.ship.Ship;
 
 
-public class WorldView extends BasicGameState {
+public class WorldView extends BasicGameState implements ScreenController {
 	private static final double OFFSET_FACTOR = 0.3;
 	private static final int X_AXIS_INDEXATION = 10;
 	private int offsetX = 0;
 	private int offsetY = 0;
-	private World world; //The world this view is connected to
+	private World world; //The world that contains all object data and methods
 	private WorldGenerator generator;
 	private Image background;
 	private int greatestScreenSize;
 	private float backgroundScale;
 	private Nifty nifty;
+	private StateBasedGame sbg;
 	@Override
 	/**
 	 * Instantiates the world generator which returns a world with random elements and the background of the world. 
@@ -53,6 +55,7 @@ public class WorldView extends BasicGameState {
 		this.generator = new WorldGenerator(4000,4000,0.01,0.005,2);
 		this.world = generator.getWorld();
 		this.background = ImageFactory.getBackground();
+		this.sbg = sbg;
 		if(world.getHeight() > world.getWidth()){
 			this.greatestScreenSize = world.getHeight();
 		}else{
@@ -61,10 +64,12 @@ public class WorldView extends BasicGameState {
 		this.backgroundScale = (float)greatestScreenSize / (float)background.getHeight();
 		
 		nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), new LwjglInputSystem(), new AccurateTimeProvider());
+		nifty.registerScreenController(this); //Register this as the screencontroller that contains interaction methods for GUI. (Methods are at bottom)
 		nifty.loadStyleFile("nifty-default-styles.xml");
-		nifty.loadControlFile("nifty-default-controls.xml");
+		nifty.loadControlFile("nifty-default-controls.xml"); //How the buttons look and stuff
 		
-		nifty.fromXml("xml/MainHUD.xml","hud", new ScreenControllerExample());
+		nifty.fromXml("xml/MainHUD.xml","hud", this); //Load the interface data from the xml file, using this class as the screencontroller
+		
 		
 	}
 
@@ -262,22 +267,51 @@ public class WorldView extends BasicGameState {
 		}
 	}
 
-
+/*____________________________________________ Nifty GUI controller __________________________________________________________ */
 
 	@Override
 	public int getID() {
 		return 1;
 	}
+
+	@Override
+	public void bind(Nifty nifty, Screen screen) {
+		
+	}
+
+	@Override
+	public void onEndScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStartScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void EnterSelectedPlanet() {
+		sbg.enterState(0);
+	}
 }
 
 class ScreenControllerExample implements ScreenController {
-	public void bind(Nifty arg0, Screen arg1) {}
+	public void bind(Nifty nifty, Screen screen) {}
 	public void onEndScreen() {}
 	public void onStartScreen() {}
+	
+	public void EnterSelectedPlanet() {
+		System.out.println("hi!!");
+	}
 
 	@NiftyEventSubscriber(id="SelGrpBt")
 	public void onSelGrpBtClicked(final String id, final ButtonClickedEvent event) {
 		System.out.println("Clicou");
 	}
 }
+
+
+
+
 	

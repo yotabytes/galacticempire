@@ -8,9 +8,15 @@
 <layer id="foreground" backgroundColor="#0000" childLayout="vertical">
     </layer>
 </screen>
+<<<<<<< HEAD
+<screen id="hud">
+    <layer id="background" childLayout="center">
+    	 <image filename="img/HUD.PNG"></image>
+=======
 <screen id="hud" controller="WorldView">
     <layer id="background" childLayout="center" width="100%">
     	 <image filename="img/HUD.png" width="100%" height="100%"></image>
+>>>>>>> 48f6b90eec909daee3974eaff9f71ae0bd9f3b43
     </layer>
     <layer id="foreground" childLayout="horizontal">
     <panel id="leftSpaceHolder" width="80%" height="100%" childLayout="vertical" >
