@@ -58,10 +58,16 @@ public class World {
 		return ships;
 	}
 	
-	public Collection<SpaceObject> getSpaceObjects() {
-		Collection<SpaceObject> allObjects = new ArrayList<SpaceObject>();
+	public Collection<CelestialBody> getCelestialBodies() {
+		Collection<CelestialBody> allObjects = new ArrayList<CelestialBody>();
 		allObjects.addAll(planets);
 		allObjects.addAll(stars);
+		return allObjects;
+	}
+	
+	public Collection<SpaceObject> getSpaceObjects() {
+		Collection<SpaceObject> allObjects = new ArrayList<SpaceObject>();
+		allObjects.addAll(getCelestialBodies());
 		allObjects.addAll(ships);
 		return allObjects;
 	}
@@ -83,6 +89,8 @@ public class World {
 		this.stars = stars;
 		this.ships = ships;
 	}
+
+	
 	
 }
 					

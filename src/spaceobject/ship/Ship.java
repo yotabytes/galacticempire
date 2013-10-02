@@ -3,20 +3,21 @@ package spaceobject.ship;
 import java.util.HashMap;
 
 import minerals.Mineral;
+import spaceobject.Planet;
 import spaceobject.SpaceObject;
 
 public abstract class Ship extends SpaceObject{
 
 
 	// variabeles and constants:
-	private ShipState state;
-	private float destinationX;
-	private float destinationY;
-	private int fuel;
-	private double storage;
-	private double speed;
-	private double angle;
-	private HashMap<Mineral,Double> cargo;
+	public static final int DEFAULT_SHIP_RADIUS = 15;
+	protected ShipState state;
+	protected Planet destinationPlanet;
+	protected int fuel;
+	protected double storage;
+	protected double speed;
+	protected double angle;
+	protected HashMap<Mineral,Double> cargo;
 
 	// getters and setters:
 
@@ -62,27 +63,43 @@ public abstract class Ship extends SpaceObject{
 		else
 			this.angle = angle % (2*Math.PI);
 	}
+	
+	
 	// Constructors and code:
 
-	public float getDestinationX() {
-		return destinationX;
+	
+
+	/**
+	 * @return the state
+	 */
+	public ShipState getState() {
+		return state;
 	}
 
-	public void setDestinationX(float destinationX) {
-		this.destinationX = destinationX;
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(ShipState state) {
+		this.state = state;
 	}
 
-	public float getDestinationY() {
-		return destinationY;
+	/**
+	 * @return the destinationPlanet
+	 */
+	public Planet getDestinationPlanet() {
+		return destinationPlanet;
 	}
 
-	public void setDestinationY(float destinationY) {
-		this.destinationY = destinationY;
+	/**
+	 * @param destinationPlanet the destinationPlanet to set
+	 */
+	public void setDestinationPlanet(Planet destinationPlanet) {
+		this.destinationPlanet = destinationPlanet;
 	}
-
 
 	public Ship(int x, int y) {
-		super(x, y);
+		super(x, y, DEFAULT_SHIP_RADIUS);
+		this.speed = 0.2;
 	}
 
 	public void operate(double delta){
@@ -91,10 +108,8 @@ public abstract class Ship extends SpaceObject{
 			double newPositionY = getY() + (delta * speed * Math.sin(getAngle()));
 			setPosition((float)newPositionX,(float)newPositionY); 
 		}
-		if(fuzzyEquals(getX(), getDestinationX()) && fuzzyEquals(getY(), getDestinationY())){
+		if(this.destinationPlanet != null && this.overlap(destinationPlanet)){
 			this.state = ShipState.ON_PLANET;
-			this.setDestinationX(0);
-			this.setDestinationY(0);
 		}
 	}
 
@@ -105,9 +120,11 @@ public abstract class Ship extends SpaceObject{
 	
 	public static final double EPSILON = 5;
 
-	public static boolean fuzzyEquals(double x, double y) {
-	    if (Double.isNaN(x) || Double.isNaN(y))
-	      return false;
-	    return Math.abs(x - y) <= EPSILON || Double.valueOf(x).equals(Double.valueOf(y));
-	  }
+	public boolean overlap(SpaceObject other){
+			if (other == this)
+				return true;
+			if (this.getDistanceBetween(other.getX(), other.getY()) < other.getRadius())
+				return true;
+			return false;
+	}
 }

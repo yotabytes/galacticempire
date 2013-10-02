@@ -7,7 +7,6 @@ package spaceobject;
  */
 public class Star extends CelestialBody {
 
-	private int radius;
 	public final static int MAX_RADIUS = 100;
 	public final static int MIN_RADIUS = 20;
 	public Star(int x, int y, int radius) {

@@ -36,32 +36,32 @@ public enum Mineral {
 			return true;
 		}
 	}
-	, ADAMANT("adamant", 25) {
+	, ADAMANT("Adamant", 25) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return !(planet.getTemperature() > 773); // Adamant can only spawn on planets with a temperature larger than 500.
 		}
-	}, GOLD("gold", 25) {
+	}, GOLD("Gold", 25) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true; // gold has no constraints
 		}
-	}, SILVER("silver", 50) {
+	}, SILVER("Silver", 50) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true; // silver has no constraints.
 		}
-	}, DIAMOND("diamond", 15) {
+	}, DIAMOND("Diamond", 15) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return planet.getRadius() > Planet.MAX_RADIUS - (Planet.MAX_RADIUS - Planet.MIN_RADIUS) / 4; // pressure needed for forming diamond
 		}
-	}, FROSTIUM("frostium", 15) {
+	}, FROSTIUM("Frostium", 15) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return planet.getTemperature() < 100;
 		}
-	}, KYANITE("kyanite", 15) {
+	}, KYANITE("Kyanite", 15) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return !planet.hasWater(); // only available on dry planets

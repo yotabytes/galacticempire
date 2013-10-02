@@ -33,6 +33,7 @@ import spaceobject.SpaceObject;
 import spaceobject.Star;
 import spaceobject.ship.ExplorerShip;
 import spaceobject.ship.Ship;
+import spaceobject.ship.ShipState;
 
 
 public class WorldView extends BasicGameState implements ScreenController {
@@ -47,6 +48,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 	private float backgroundScale;
 	private Nifty nifty;
 	private StateBasedGame sbg;
+	private SpaceObject selectedObject;
 	@Override
 	/**
 	 * Instantiates the world generator which returns a world with random elements and the background of the world. 
@@ -62,15 +64,15 @@ public class WorldView extends BasicGameState implements ScreenController {
 			this.greatestScreenSize = world.getWidth();
 		} 
 		this.backgroundScale = (float)greatestScreenSize / (float)background.getHeight();
-		
+
 		nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), new LwjglInputSystem(), new AccurateTimeProvider());
 		nifty.registerScreenController(this); //Register this as the screencontroller that contains interaction methods for GUI. (Methods are at bottom)
 		nifty.loadStyleFile("nifty-default-styles.xml");
 		nifty.loadControlFile("nifty-default-controls.xml"); //How the buttons look and stuff
-		
+
 		nifty.fromXml("xml/MainHUD.xml","hud", this); //Load the interface data from the xml file, using this class as the screencontroller
-		
-		
+
+
 	}
 
 	@Override
@@ -81,23 +83,60 @@ public class WorldView extends BasicGameState implements ScreenController {
 		drawPlanets();
 		drawStars();
 		drawShips();
-		checkMouseOver(gc.getInput(), g);
-		
-		
+		checkMouseOver(gc.getInput(), g);	
+		if(selectedObject != null){
+			g.drawOval(selectedObject.getX() - selectedObject.getRadius(), selectedObject.getY() - selectedObject.getRadius(), selectedObject.getRadius()*2, selectedObject.getRadius()*2);
+		}
 		g.resetTransform(); //Make sure that the user interface stays on the screen and does not translate with the world while scrolling around.
 		SlickCallable.enterSafeBlock();
 		nifty.render(false);
 		SlickCallable.leaveSafeBlock();
-		
+
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)throws SlickException {
-		// key input actions:
-		for(Ship shp : world.getShips()){
-			shp.move(arg2);
+		if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+			handleMouseClick(gc);
 		}
+		for(Ship shp : world.getShips()){
+			shp.operate(arg2);
+		}
+		// key input actions:
 		trackCameraMovement(gc,sbg, arg2);
+	}
+
+
+	private void handleMouseClick(GameContainer gc) {
+		if(selectedObject instanceof Ship){
+			Planet selectedBody = null;
+			for(Planet plt : world.getPlanets()){
+				if(mouseOnSpaceObject(plt,gc.getInput().getMouseX(),gc.getInput().getMouseY())){
+					selectedBody = plt;
+					break;
+				}
+			}
+			if(selectedBody != null){
+				((Ship)selectedObject).setDestinationPlanet(selectedBody);
+				double dX = selectedBody.getX() - selectedObject.getX();
+				double dY = selectedBody.getY() - selectedObject.getY();
+				double angle = Math.atan(dY/dX);
+				if(dX < 0){
+					angle += Math.PI;
+				}
+				((Ship)selectedObject).setAngle(angle);
+				((Ship)selectedObject).setState(ShipState.TRAVELING);
+				return;
+			}
+			
+		}
+		for(SpaceObject obj : world.getSpaceObjects()){
+			if(mouseOnSpaceObject(obj,gc.getInput().getMouseX(),gc.getInput().getMouseY())){
+				selectedObject = obj;
+				return;//if a selectedobject is found return else if non is found set to null
+			}
+		}
+		selectedObject = null;
 	}
 
 	//__________________________ DRAW FUNCTIONS _____________________________
@@ -124,8 +163,9 @@ public class WorldView extends BasicGameState implements ScreenController {
 	 */
 	private void drawShips() {
 		for(Ship shp : world.getShips()){
-			float scale = ((float)ExplorerShip.EXPLORER_SHIP_SIZE / (float)shp.getImage().getHeight());
-			shp.getImage().draw(shp.getX(), shp.getY(),scale);
+			float scale = ((float)2*shp.getRadius() / (float)shp.getImage().getHeight());
+			shp.getImage().setRotation((float) Math.toDegrees(shp.getAngle() + Math.PI/2));
+			shp.getImage().draw(shp.getX() - shp.getRadius(), shp.getY() - shp.getRadius(),scale);
 		}
 	}
 
@@ -138,11 +178,11 @@ public class WorldView extends BasicGameState implements ScreenController {
 	private void checkMouseOver(Input input, Graphics g) {
 		int mX = input.getMouseX();
 		int mY = input.getMouseY();
-		for(SpaceObject obj : world.getSpaceObjects()){
-			if(mouseOnSpaceObject(obj,mX,mY)){
-				if (obj instanceof CelestialBody)
-					g.drawOval(obj.getX() - ((CelestialBody)obj).getRadius(), obj.getY() - ((CelestialBody)obj).getRadius(), 2*((CelestialBody)obj).getRadius(), 2*((CelestialBody)obj).getRadius());
-					drawCelestialBodyStats((CelestialBody)obj, g);
+		for(CelestialBody cby : world.getCelestialBodies()){
+			if(mouseOnSpaceObject(cby,mX,mY)){
+				g.drawOval(cby.getX() - ((SpaceObject)cby).getRadius(), cby.getY() - ((SpaceObject)cby).getRadius(), 2*((SpaceObject)cby).getRadius(), 2*((SpaceObject)cby).getRadius());
+				drawCelestialBodyStats((SpaceObject)cby, g);
+				return;
 			}
 		}
 
@@ -154,7 +194,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 	 * @param obj
 	 * @param g
 	 */
-	private void drawCelestialBodyStats(CelestialBody obj, Graphics g){
+	private void drawCelestialBodyStats(SpaceObject obj, Graphics g){
 		DecimalFormat fm = new DecimalFormat("#.##");
 		if(obj instanceof Planet){
 			float cX = obj.getX() + obj.getRadius();
@@ -255,19 +295,15 @@ public class WorldView extends BasicGameState implements ScreenController {
 	 * @return true if the distance between the object and the mouse is smaller than its radius.
 	 */
 	private boolean mouseOnSpaceObject(SpaceObject obj, int mouseX, int mouseY){
-		if (obj instanceof CelestialBody){
-			if(obj.getDistanceBetween(mouseX - offsetX, mouseY - offsetY) < ((CelestialBody) obj).getRadius()){
-				return true;
-			}else{
-				return false;
-			}
+		if(obj.getDistanceBetween(mouseX - offsetX, mouseY - offsetY) < ((SpaceObject) obj).getRadius()){
+			return true;
+		}else{
+			return false;
 		}
-		else {
-			return false; // temporary return false until other space object methods are included.
-		}
+
 	}
 
-/*____________________________________________ Nifty GUI controller __________________________________________________________ */
+	/*____________________________________________ Nifty GUI controller __________________________________________________________ */
 
 	@Override
 	public int getID() {
@@ -276,21 +312,21 @@ public class WorldView extends BasicGameState implements ScreenController {
 
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
-		
+
 	}
 
 	@Override
 	public void onEndScreen() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStartScreen() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void EnterSelectedPlanet() {
 		sbg.enterState(0);
 	}
@@ -300,7 +336,7 @@ class ScreenControllerExample implements ScreenController {
 	public void bind(Nifty nifty, Screen screen) {}
 	public void onEndScreen() {}
 	public void onStartScreen() {}
-	
+
 	public void EnterSelectedPlanet() {
 		System.out.println("hi!!");
 	}
@@ -314,4 +350,4 @@ class ScreenControllerExample implements ScreenController {
 
 
 
-	
+

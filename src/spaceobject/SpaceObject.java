@@ -5,12 +5,13 @@ import org.newdawn.slick.Image;
 
 
 public abstract class SpaceObject {
-	private float x, y;
-	private Image image;
+	protected float x, y;
+	protected Image image;
 	
-	public SpaceObject(float x, float y) {
+	public SpaceObject(float x, float y, int radius) {
 		this.x = x;
 		this.y = y;
+		this.radius = radius;
 	}
 	
 	public float getX() {
@@ -53,6 +54,16 @@ public abstract class SpaceObject {
 		this.image = image;
 	}
 	
+	public int getRadius() {
+		return radius;
+	}
+
+	protected int radius;
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
 	public String getDescription;
 	
 }
