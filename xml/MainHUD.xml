@@ -8,13 +8,26 @@
 <layer id="foreground" backgroundColor="#0000" childLayout="vertical">
     </layer>
 </screen>
-<screen id="hud">
-    <layer id="background" childLayout="center">
-    	 <image filename="img/primitiveHUD.png"></image>
+<screen id="hud" controller="WorldView">
+    <layer id="background" childLayout="center" width="100%">
+    	 <image filename="img/HUD.png" width="100%" height="100%"></image>
     </layer>
     <layer id="foreground" childLayout="horizontal">
-     <panel id="textarea1" width="80%" height="20%" childLayout="vertical" >  
-       <text text="test" width="100%" height="100%" />
+    <panel id="leftSpaceHolder" width="80%" height="100%" childLayout="vertical" >
+    </panel>
+     <panel id="rightUIBox" width="20%" height="100%" childLayout="vertical" >  
+     	<panel id="rightUIBoxTop" width="100%" height="80%" childLayout="vertical" >
+     		<effect>
+   				 <onHover name="move" mode="in" direction="top" length="300" startDelay="0" inherit="true"/>
+ 			 </effect>
+     	</panel>
+     	<panel id="rightUIBoxBottom" width="100%" height="20%" childLayout="horizontal" >
+      	 <control name="button" label="Enter Planet" id="Btn_EnterPlanet" align="left" valign="top" visibleToMouse="true">
+      	 	<interact onClick="EnterSelectedPlanet()" />
+      	 </control>
+      	 <control name="button" label="View Storage" id="Btn_ViewStorage" align="left" valign="top">
+      	 </control>
+      	 </panel>
      </panel>
      </layer>
 </screen>
