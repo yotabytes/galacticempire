@@ -74,7 +74,7 @@ public class WorldView extends BasicGameState {
 		drawStars();
 		checkMouseOver(gc.getInput(), g);
 		
-		
+		g.resetTransform(); //Make sure that the user interface stays on the screen and does not translate with the world while scrolling around.
 		SlickCallable.enterSafeBlock();
 		nifty.render(false);
 		SlickCallable.leaveSafeBlock();
