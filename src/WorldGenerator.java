@@ -143,9 +143,12 @@ public class WorldGenerator {
 			} while (!isSpawnablePlanet(newPlanets, newPlanet));
 			newPlanets.add(newPlanet);
 			double temp = 0;
+			// add temperatures to new planet
 			for(Star str : this.getStars()){
 				temp += (str.getRadius()/(Math.pow((str.getDistanceBetween(newPlanet.getX(), newPlanet.getY()) - str.getRadius() - newPlanet.getRadius()),2))) * Planet.TEMPERATURE_MULTIPLIER;
 			}
+			if (randomGenerator.nextInt(10) < 8)
+				newPlanet.toggleWater(); // 80 percent chance on water on planet
 			newPlanet.setTemperature(temp);
 		}
 		
@@ -171,12 +174,20 @@ public class WorldGenerator {
 	private void addMinerals(double mineralDensity){
 		int mineralCount = (int) (planets.size() * mineralDensity);
 		
+		// compute total rarity
+		
+		int totalRarity = 0;
+		
+		for (Mineral mineral: Mineral.values()){
+			totalRarity += mineral.getRarity();
+		}
+		
 		// construct mineral pool
 		
 		Collection<Mineral> mineralPool = new ArrayList<Mineral>();
 		
 		for (Mineral mineral: Mineral.values()){
-			int timesInPool = (int) (mineralCount*mineral.getRarity());
+			int timesInPool = (int) (mineralCount*mineral.getRarity()/totalRarity);
 			if (timesInPool == 0)
 				timesInPool = 1; // make sure every mineral is added at least once into the pool.
 			for (int i=0; i< timesInPool; i++)

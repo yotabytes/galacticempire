@@ -3,53 +3,68 @@ package minerals;
 import spaceobject.Planet;
 
 /*
- * A mineral as it is used to generate the world. Every mineral has a unique name, a rarity, and spawning constraint checkers
+ * A mineral as it is used to generate the world. Every mineral has a unique name, a rarity factor, and spawning constraint checkers
  */
 public enum Mineral {
 	
 	// List of minerals with constraints, minerals that get added here will automatically be used in map generation.
-	// total of rarities must be equal to 1.
-	COAL("coal",0.2) {
+	// The rarity factor can be any positive integer, higher integer means higher frequency.
+	COAL("coal",150) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true; // Coal can spawn anywhere.
 		}
-	}, IRON("Iron",0.2) {
+	}, IRON("Iron",100) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true; // iron can spawn anywhere.
 		}
-	}, TIN("Tin", 0.2) {
+	}, TIN("Tin", 150) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true;
 		}
-	}, COPPER("Copper", 0.2) {
-		@Override
-		public boolean HasSatisfiedConstraints(Planet planet) {
-			return true;
-		}
-	}
-	, QUARTS("Quartz", 0.1) {
+	}, COPPER("Copper", 150) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return true;
 		}
 	}
-	, ADAMANT("adamant",0.05) {
+	, QUARTS("Quartz", 100) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
-			return !(planet.getTemperature() > 500); // Adamant can only spawn on planets with a temperature larger than 500.
+			return true;
 		}
-	}, DIAMOND("diamond", 0.025) {
+	}
+	, ADAMANT("adamant", 25) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
-			return planet.getTemperature() > 773;
+			return !(planet.getTemperature() > 773); // Adamant can only spawn on planets with a temperature larger than 500.
 		}
-	}, FROSTIUM("frostium", 0.025) {
+	}, GOLD("gold", 25) {
+		@Override
+		public boolean HasSatisfiedConstraints(Planet planet) {
+			return true; // gold has no constraints
+		}
+	}, SILVER("silver", 50) {
+		@Override
+		public boolean HasSatisfiedConstraints(Planet planet) {
+			return true; // silver has no constraints.
+		}
+	}, DIAMOND("diamond", 15) {
+		@Override
+		public boolean HasSatisfiedConstraints(Planet planet) {
+			return planet.getRadius() > Planet.MAX_RADIUS - (Planet.MAX_RADIUS - Planet.MIN_RADIUS) / 4; // pressure needed for forming diamond
+		}
+	}, FROSTIUM("frostium", 15) {
 		@Override
 		public boolean HasSatisfiedConstraints(Planet planet) {
 			return planet.getTemperature() < 100;
+		}
+	}, KYANITE("kyanite", 15) {
+		@Override
+		public boolean HasSatisfiedConstraints(Planet planet) {
+			return !planet.hasWater(); // only available on dry planets
 		}
 	};
 	
