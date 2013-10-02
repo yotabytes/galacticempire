@@ -16,6 +16,7 @@ public class Planet extends CelestialBody {
 	private Collection<Mineral> minerals;
 	private Collection<Ship> ships; // hold references to all ships currently on this planet.
 	private boolean oxygen;
+	private boolean water;
 	
 	public final static int HOT_PLANET_TRESHOLD = 1000;
 	public final static int MIN_LIVABLE_TEMPERATURE = 253;
@@ -55,6 +56,18 @@ public class Planet extends CelestialBody {
 		return oxygen;
 	}
 	
+	public boolean hasWater(){
+		return water;
+	}
+	
+	public void toggleWater(){
+		if (!this.hasWater())
+			this.water = true;
+		else
+			this.water = false;
+		checkIsLivable();
+	}
+	
 	public String getDescription() {
 		return "A planet that may contain valuable resources to extract. Various dangers may reside on and below the surface.";
 	}
@@ -66,7 +79,7 @@ public class Planet extends CelestialBody {
 	}
 	
 	private void checkIsLivable(){
-		if(MIN_LIVABLE_TEMPERATURE < this.getTemperature()  && this.getTemperature() < MAX_LIVABLE_TEMPERATURE){
+		if(MIN_LIVABLE_TEMPERATURE < this.getTemperature()  && this.getTemperature() < MAX_LIVABLE_TEMPERATURE && this.hasWater()){
 			this.isLivable = true;
 		}
 	}

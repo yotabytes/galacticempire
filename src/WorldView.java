@@ -140,16 +140,25 @@ public class WorldView extends BasicGameState {
 			int cY = obj.getY() - obj.getRadius();
 			int yIndent = g.getFont().getLineHeight();
 			String hasOxygen;
+			String hasWater;
 			if(((Planet) obj).hasOxygen()){
 				hasOxygen = "yes";
 			}else{
 				hasOxygen = "no";
+			}
+			if(((Planet) obj).hasWater()){
+				hasWater = "yes";
+			}else{
+				hasWater = "no";
 			}
 			//Draw temperature
 			String temp = fm.format(((Planet) obj).getTemperature() - CelestialBody.KELVIN_CONSTANT) + "°C";
 			g.drawString(temp,cX,cY);
 			//Draw oxygen yes/no
 			g.drawString("Oxygen: " + hasOxygen, cX, cY + yIndent);
+			yIndent += g.getFont().getLineHeight();
+			//Draw water yes/no
+			g.drawString("Water: " + hasWater, cX, cY + yIndent);
 			yIndent += g.getFont().getLineHeight();
 			//Draw Minerals
 			g.setColor(Color.yellow);
