@@ -2,8 +2,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import spaceobject.Planet;
-import spaceobject.SpaceObject;
 import spaceobject.Star;
+import spaceobject.ship.ExplorerShip;
+import spaceobject.ship.Ship;
 
 import java.util.Random;
 
@@ -47,6 +48,8 @@ public class WorldGenerator {
 	 */
 	Collection<Star> stars;
 	
+	Ship explorer;
+	
 	// Getters and setters:
 	
 	public int getHeight() {
@@ -72,6 +75,7 @@ public class WorldGenerator {
 	public Collection<Star> getStars() {
 		return stars;
 	}
+	
 	
 	// Constructors and other code:
 	
@@ -100,6 +104,7 @@ public class WorldGenerator {
 		generateStars(starDensity);
 		generatePlanets(planetDensity);
 		addMinerals(mineralDensity);
+		addExplorerShip();
 		/* Debug information.
 		for(Planet plt : this.getPlanets()){
 			System.out.println(plt.getTemperature());
@@ -107,6 +112,12 @@ public class WorldGenerator {
 		*/
 	}
 	
+	private void addExplorerShip() {
+		Random rnd = new Random();
+		this.explorer = new ExplorerShip(0,0);
+	}
+
+
 	private void generateStars(double starDensity){
 		int starCount = (int) (((starDensity * getWidth() * getHeight()) / (Star.MAX_RADIUS * Star.MAX_RADIUS)) + 1); // number of stars (minimum 1!).
 		Collection<Star> newStars = new ArrayList<Star>();
