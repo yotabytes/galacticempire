@@ -128,13 +128,12 @@ public class WorldGenerator {
 	private void addShips() {
 		Collection<Ship> newShips = new ArrayList<Ship>();
 		newShips.add(new ExplorerShip(this.getWidth()/2 , this.getHeight()/2));
-		newShips.add(new ExtractionShip(this.getWidth()/3, this.getHeight() / 3));
 		this.setShips(newShips);
 		for (Ship shp : newShips){
 			ArrayList<Planet> temp = (ArrayList<Planet>) getWorld().getPlanets();
 			temp.get(0).addShip(shp); // temporary until player can pick his starting planet.
-			shp.setX(temp.get(0).getX());
-			shp.setY(temp.get(0).getY());
+			shp.setX(temp.get(0).getX()+2);
+			shp.setY(temp.get(0).getY()+2);
 		}
 	}
 

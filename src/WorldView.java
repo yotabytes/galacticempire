@@ -133,16 +133,22 @@ public class WorldView extends BasicGameState implements ScreenController {
 		}
 		else {
 			for (Ship shp: world.getShips()){
-				double distance = Math.sqrt(Math.pow(gc.getInput().getMouseX() - offsetX - getPlanetFlagPos(shp)[0],2) + Math.pow(gc.getInput().getMouseY() - offsetY- getPlanetFlagPos(shp)[1], 2));
-				if (distance <= PLANET_FLAG_RADIUS){
-					selectedObject = shp;
-					return;
+				if (shp.getCurrentPlanet() != null){
+					double distance = Math.sqrt(Math.pow(gc.getInput().getMouseX() - offsetX - getPlanetFlagPos(shp)[0],2) + Math.pow(gc.getInput().getMouseY() - offsetY- getPlanetFlagPos(shp)[1], 2));
+					if (distance <= PLANET_FLAG_RADIUS){
+						selectedObject = shp;
+						return;
+					}
 				}
 			}
 		}
 		for(SpaceObject obj : world.getSpaceObjects()){
 			if(mouseOnSpaceObject(obj,gc.getInput().getMouseX(),gc.getInput().getMouseY())){
-				selectedObject = obj;
+				if(obj instanceof Ship && ((Ship) obj).getState() != ShipState.TRAVELING){
+					continue;
+				}
+				else
+					selectedObject = obj;
 				return;//if a selectedobject is found return else if non is found set to null
 			}
 		}
@@ -189,7 +195,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 			if (shp.getCurrentPlanet() != null){
 				coordinates = getPlanetFlagPos(shp);
 				g.setColor(Color.green);
-				g.fillOval(coordinates[0], coordinates[1], PLANET_FLAG_RADIUS*2, PLANET_FLAG_RADIUS*2);
+				g.fillOval(coordinates[0] - PLANET_FLAG_RADIUS, coordinates[1] - PLANET_FLAG_RADIUS, PLANET_FLAG_RADIUS*2, PLANET_FLAG_RADIUS*2);
 				g.setColor(Color.white);
 				shipCount = shp.getCurrentPlanet().getShips().size();
 				g.drawString("" + shipCount, coordinates[0] - PLANET_FLAG_RADIUS, coordinates[1] - PLANET_FLAG_RADIUS);

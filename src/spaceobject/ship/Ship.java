@@ -122,7 +122,7 @@ public abstract class Ship extends SpaceObject{
 
 	public Ship(int x, int y) {
 		super(x, y, DEFAULT_SHIP_RADIUS);
-		this.speed = 0.2;
+		this.speed = 0.1;
 	}
 
 	public void operate(double delta){
@@ -134,10 +134,10 @@ public abstract class Ship extends SpaceObject{
 				// break down biderectional association.
 				getCurrentPlanet().removeShip(this);
 			}
-		}
-		if(getDestinationPlanet() != null && this.overlap(destinationPlanet)){
-			this.state = ShipState.ON_PLANET;
-			setCurrentPlanet(destinationPlanet); // update possible current planet.
+			if(getDestinationPlanet() != null && this.overlap(destinationPlanet)){
+				this.state = ShipState.ON_PLANET;
+				destinationPlanet.addShip(this); // update possible current planet.
+			}
 		}
 	}
 
