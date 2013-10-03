@@ -18,6 +18,7 @@ import org.newdawn.slick.SlickException;
  * Contains everything related to generating a world.
  * @author Kristof Bruyninckx
  * @author Wouter Bruyninckx
+ * @author Pieter Verlinden
  */
 
 public class WorldGenerator {
@@ -129,6 +130,12 @@ public class WorldGenerator {
 		newShips.add(new ExplorerShip(this.getWidth()/2 , this.getHeight()/2));
 		newShips.add(new ExtractionShip(this.getWidth()/3, this.getHeight() / 3));
 		this.setShips(newShips);
+		for (Ship shp : newShips){
+			ArrayList<Planet> temp = (ArrayList<Planet>) getWorld().getPlanets();
+			temp.get(0).addShip(shp); // temporary until player can pick his starting planet.
+			shp.setX(temp.get(0).getX());
+			shp.setY(temp.get(0).getY());
+		}
 	}
 
 

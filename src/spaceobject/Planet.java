@@ -49,6 +49,12 @@ public class Planet extends CelestialBody {
 	
 	public void addShip(Ship source){
 		getShips().add(source);
+		source.setCurrentPlanet(this);// biderectional association
+	}
+	
+	public void removeShip(Ship source){
+		getShips().remove(source);
+		source.setCurrentPlanet(null); // biderectional association
 	}
 	
 	public Collection<Building> getBuildings(){
@@ -59,7 +65,7 @@ public class Planet extends CelestialBody {
 		this.buildings = newBuildings;
 	}
 	
-	public void addShip(Building source){
+	public void addBuilding(Building source){
 		getBuildings().add(source);
 	}
 

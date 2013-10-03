@@ -16,6 +16,7 @@ public abstract class Ship extends SpaceObject{
 	protected static int defaultFuelMax = 100;
 	protected ShipState state;
 	protected Planet destinationPlanet;
+	protected Planet currentPlanet;
 	protected int fuel;
 	protected double storage;
 	protected double speed;
@@ -81,10 +82,15 @@ public abstract class Ship extends SpaceObject{
 			this.angle = angle % (2*Math.PI);
 	}
 	
+
+	public Planet getCurrentPlanet() {
+		return currentPlanet;
+	}
+	public void setCurrentPlanet(Planet newPlanet) {
+		this.currentPlanet = newPlanet; // bidirectional association
+	}
 	
 	// Constructors and code:
-
-	
 
 	/**
 	 * @return the state
@@ -124,9 +130,14 @@ public abstract class Ship extends SpaceObject{
 			double newPositionX = getX() + (delta * speed * Math.cos(getAngle()));
 			double newPositionY = getY() + (delta * speed * Math.sin(getAngle()));
 			setPosition((float)newPositionX,(float)newPositionY); 
+			if (getCurrentPlanet() != null && getDestinationPlanet() != getCurrentPlanet()){
+				// break down biderectional association.
+				getCurrentPlanet().removeShip(this);
+			}
 		}
-		if(this.destinationPlanet != null && this.overlap(destinationPlanet)){
+		if(getDestinationPlanet() != null && this.overlap(destinationPlanet)){
 			this.state = ShipState.ON_PLANET;
+			setCurrentPlanet(destinationPlanet); // update possible current planet.
 		}
 	}
 

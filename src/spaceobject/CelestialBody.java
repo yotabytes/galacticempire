@@ -29,5 +29,4 @@ public abstract class CelestialBody extends SpaceObject {
 	public CelestialBody(int x, int y, int radius) {
 		super(x, y, radius);
 	}
-	
 }

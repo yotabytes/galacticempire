@@ -39,6 +39,7 @@ import spaceobject.ship.ShipState;
 public class WorldView extends BasicGameState implements ScreenController {
 	private static final double OFFSET_FACTOR = 0.3;
 	private static final int X_AXIS_INDEXATION = 10;
+	private static final int PLANET_FLAG_RADIUS = 10;
 	private int offsetX = 0;
 	private int offsetY = 0;
 	private World world; //The world that contains all object data and methods
@@ -83,6 +84,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 		drawPlanets();
 		drawStars();
 		drawShips();
+		drawShipPlanetFlags(g);
 		checkMouseOver(gc.getInput(), g);	
 		if(selectedObject != null){
 			g.drawOval(selectedObject.getX() - selectedObject.getRadius(), selectedObject.getY() - selectedObject.getRadius(), selectedObject.getRadius()*2, selectedObject.getRadius()*2);
@@ -128,7 +130,15 @@ public class WorldView extends BasicGameState implements ScreenController {
 				((Ship)selectedObject).setState(ShipState.TRAVELING);
 				return;
 			}
-			
+		}
+		else {
+			for (Ship shp: world.getShips()){
+				double distance = Math.sqrt(Math.pow(gc.getInput().getMouseX() - offsetX - getPlanetFlagPos(shp)[0],2) + Math.pow(gc.getInput().getMouseY() - offsetY- getPlanetFlagPos(shp)[1], 2));
+				if (distance <= PLANET_FLAG_RADIUS){
+					selectedObject = shp;
+					return;
+				}
+			}
 		}
 		for(SpaceObject obj : world.getSpaceObjects()){
 			if(mouseOnSpaceObject(obj,gc.getInput().getMouseX(),gc.getInput().getMouseY())){
@@ -137,6 +147,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 			}
 		}
 		selectedObject = null;
+		return;
 	}
 
 	//__________________________ DRAW FUNCTIONS _____________________________
@@ -163,10 +174,37 @@ public class WorldView extends BasicGameState implements ScreenController {
 	 */
 	private void drawShips() {
 		for(Ship shp : world.getShips()){
-			float scale = ((float)2*shp.getRadius() / (float)shp.getImage().getHeight());
-			shp.getImage().setRotation((float) Math.toDegrees(shp.getAngle() + Math.PI/2));
-			shp.getImage().draw(shp.getX() - shp.getRadius(), shp.getY() - shp.getRadius(),scale);
+			if (shp.getState() == ShipState.TRAVELING || selectedObject == shp){ // only draw travelling or selected ships
+				float scale = ((float)2*shp.getRadius() / (float)shp.getImage().getHeight());
+				shp.getImage().setRotation((float) Math.toDegrees(shp.getAngle() + Math.PI/2));
+				shp.getImage().draw(shp.getX() - shp.getRadius(), shp.getY() - shp.getRadius(),scale);
+			}
 		}
+	}
+	
+	private void drawShipPlanetFlags(Graphics g){
+		for (Ship shp : world.getShips()){
+			int[] coordinates;
+			int shipCount;
+			if (shp.getCurrentPlanet() != null){
+				coordinates = getPlanetFlagPos(shp);
+				g.setColor(Color.green);
+				g.fillOval(coordinates[0], coordinates[1], PLANET_FLAG_RADIUS*2, PLANET_FLAG_RADIUS*2);
+				g.setColor(Color.white);
+				shipCount = shp.getCurrentPlanet().getShips().size();
+				g.drawString("" + shipCount, coordinates[0] - PLANET_FLAG_RADIUS, coordinates[1] - PLANET_FLAG_RADIUS);
+			}
+		}
+	}
+	
+	/**<pre> ship.getCurrentPlanet() != null;
+	 */
+	private int[] getPlanetFlagPos(Ship shp){
+		int[] coordinates = new int[2];
+		coordinates[0] = (int) (shp.getCurrentPlanet().getX() + Math.cos(3*Math.PI/4) * shp.getCurrentPlanet().getRadius());
+		coordinates[1] = (int) (shp.getCurrentPlanet().getY() - Math.sin(3*Math.PI/4) * shp.getCurrentPlanet().getRadius());
+		return coordinates;
+		
 	}
 
 	/**
