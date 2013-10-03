@@ -4,6 +4,7 @@ import java.util.Collection;
 import spaceobject.Planet;
 import spaceobject.Star;
 import spaceobject.ship.ExplorerShip;
+import spaceobject.ship.ExtractionShip;
 import spaceobject.ship.Ship;
 
 import java.util.Random;
@@ -126,6 +127,7 @@ public class WorldGenerator {
 	private void addShips() {
 		Collection<Ship> newShips = new ArrayList<Ship>();
 		newShips.add(new ExplorerShip(this.getWidth()/2 , this.getHeight()/2));
+		newShips.add(new ExtractionShip(this.getWidth()/3, this.getHeight() / 3));
 		this.setShips(newShips);
 	}
 

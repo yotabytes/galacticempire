@@ -24,7 +24,7 @@ public class ImageFactory {
 	
 	//Ships
 	private static final String EXPLORER_SHIP = "img/Explorer.png";
-	private static final String EXTRACTION_SHIP	= "img/Extrationer.png";
+	private static final String EXTRACTION_SHIP	= "img/Extractioner.png";
 	private static final String BATTLE_SHIP	= "img/Fighter.png";
 	private static final String DEFAULT_SHIP = "img/Aircraft Sprites/MiG-51.PNG";
 	

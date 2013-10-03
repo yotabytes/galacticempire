@@ -100,11 +100,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 			handleMouseClick(gc);
 		}
 		for(Ship shp : world.getShips()){
-<<<<<<< HEAD
 			shp.operate(arg2);
-=======
-			//shp.move(arg2);
->>>>>>> bc371c6c4f6201c49499f753ff0662094f2854b7
 		}
 		// key input actions:
 		trackCameraMovement(gc,sbg, arg2);

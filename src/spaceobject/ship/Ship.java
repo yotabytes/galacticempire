@@ -11,6 +11,9 @@ public abstract class Ship extends SpaceObject{
 
 	// variabeles and constants:
 	public static final int DEFAULT_SHIP_RADIUS = 15;
+	
+	protected static int defaultStorageMax = 50;
+	protected static int defaultFuelMax = 100;
 	protected ShipState state;
 	protected Planet destinationPlanet;
 	protected int fuel;
@@ -21,22 +24,36 @@ public abstract class Ship extends SpaceObject{
 
 	// getters and setters:
 
+	/**
+	 * Get the current fuel amount of the ship.
+	 */
 	public int getFuel() {
 		return fuel;
 	}
-
+	/**
+	 * Set the fuel amount of the ship.
+	 * @param fuel
+	 */
 	public void setFuel(int fuel) {
 		this.fuel = fuel;
 	}
-
+	/**
+	 * Get the amount of storage in KG on this ship
+	 */
 	public double getStorage() {
 		return storage;
 	}
 
+	/**
+	 * @param storage
+	 */
 	public void setStorage(double storage) {
 		this.storage = storage;
 	}
 
+	/**
+	 * @return
+	 */
 	public HashMap<Mineral, Double> getCargo() {
 		return cargo;
 	}
