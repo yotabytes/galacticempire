@@ -118,7 +118,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 					break;
 				}
 			}
-			if(selectedBody != null){
+			if(selectedBody != null && ((Ship) selectedObject).getCurrentPlanet() != selectedBody){
 				((Ship)selectedObject).setDestinationPlanet(selectedBody);
 				double dX = selectedBody.getX() - selectedObject.getX();
 				double dY = selectedBody.getY() - selectedObject.getY();
