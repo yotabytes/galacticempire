@@ -1,5 +1,5 @@
-import java.awt.Font;
 import java.text.DecimalFormat;
+import java.util.Collection;
 
 import minerals.Mineral;
 
@@ -9,34 +9,23 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.TextField;
-import org.newdawn.slick.opengl.SlickCallable;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.*;
-import de.lessvoid.nifty.builder.LayerBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
-import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.slick2d.NiftyGameState;
-import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
 import spaceobject.CelestialBody;
 import spaceobject.Planet;
 import spaceobject.SpaceObject;
 import spaceobject.Star;
-import spaceobject.ship.ExplorerShip;
 import spaceobject.ship.Ship;
 import spaceobject.ship.ShipState;
 
 
-public class WorldView extends BasicGameState implements ScreenController {
+public class WorldView extends NiftyOverlayBasicGameState implements ScreenController {
 	private static final double OFFSET_FACTOR = 0.3;
 	private static final int X_AXIS_INDEXATION = 10;
 	private static final int PLANET_FLAG_RADIUS = 10;
@@ -47,18 +36,22 @@ public class WorldView extends BasicGameState implements ScreenController {
 	private Image background;
 	private int greatestScreenSize;
 	private float backgroundScale;
-	private Nifty nifty;
 	private StateBasedGame sbg;
 	private SpaceObject selectedObject;
+	private Screen screen;
+	private Nifty nifty;
+	private TextField selectionStats;
 	@Override
 	/**
 	 * Instantiates the world generator which returns a world with random elements and the background of the world. 
 	 */
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+	public void initGameAndGUI(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		this.generator = new WorldGenerator(5000,5000,0.01,0.005,2);
 		this.world = generator.getWorld();
 		this.background = ImageFactory.getBackground();
 		this.sbg = sbg;
+		
+		
 		if(world.getHeight() > world.getWidth()){
 			this.greatestScreenSize = world.getHeight();
 		}else{
@@ -66,18 +59,25 @@ public class WorldView extends BasicGameState implements ScreenController {
 		} 
 		this.backgroundScale = (float)greatestScreenSize / (float)background.getHeight();
 
-		nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), new LwjglInputSystem(), new AccurateTimeProvider());
-		nifty.registerScreenController(this); //Register this as the screencontroller that contains interaction methods for GUI. (Methods are at bottom)
-		nifty.loadStyleFile("nifty-default-styles.xml");
+		this.initNifty(gc, sbg);
+		
+		this.screen = this.nifty.getCurrentScreen();
+		//selectionStats = screen.findNiftyControl("Selection_Info", TextField.class);
+		
+	}
+	protected void prepareNifty(Nifty nifty, StateBasedGame sbg) {
 		nifty.loadControlFile("nifty-default-controls.xml"); //How the buttons look and stuff
 
-		nifty.fromXml("xml/MainHUD.xml","hud", this); //Load the interface data from the xml file, using this class as the screencontroller
-
+		nifty.addXml("xml/MainHUD.xml"); //Load the interface data from the xml file, using this class as the screencontroller
+		nifty.gotoScreen("hud");
+		nifty.registerScreenController(this);
+		this.nifty = nifty;
+		
 
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+	public void renderGame(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.setColor(Color.white);
 		g.translate(offsetX, offsetY);
 		background.draw(0,0,backgroundScale);
@@ -90,14 +90,14 @@ public class WorldView extends BasicGameState implements ScreenController {
 			g.drawOval(selectedObject.getX() - selectedObject.getRadius(), selectedObject.getY() - selectedObject.getRadius(), selectedObject.getRadius()*2, selectedObject.getRadius()*2);
 		}
 		g.resetTransform(); //Make sure that the user interface stays on the screen and does not translate with the world while scrolling around.
-		SlickCallable.enterSafeBlock();
-		nifty.render(false);
-		SlickCallable.leaveSafeBlock();
+		//SlickCallable.enterSafeBlock();
+		//nifty.render(false);
+		//SlickCallable.leaveSafeBlock();
 
 	}
 
 	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int arg2)throws SlickException {
+	public void updateGame(GameContainer gc, StateBasedGame sbg, int arg2)throws SlickException {
 		if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)){
 			handleMouseClick(gc);
 		}
@@ -106,6 +106,8 @@ public class WorldView extends BasicGameState implements ScreenController {
 		}
 		// key input actions:
 		trackCameraMovement(gc,sbg, arg2);
+		
+		
 	}
 
 
@@ -180,7 +182,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 	 */
 	private void drawShips() {
 		for(Ship shp : world.getShips()){
-			if (shp.getState() == ShipState.TRAVELING || selectedObject == shp){ // only draw travelling or selected ships
+			if (shp.getState() == ShipState.TRAVELING || selectedObject == shp){ // only draw traveling or selected ships
 				float scale = ((float)2*shp.getRadius() / (float)shp.getImage().getHeight());
 				shp.getImage().setRotation((float) Math.toDegrees(shp.getAngle() + Math.PI/2));
 				shp.getImage().draw(shp.getX() - shp.getRadius(), shp.getY() - shp.getRadius(),scale);
@@ -289,6 +291,7 @@ public class WorldView extends BasicGameState implements ScreenController {
 			g.drawString(temp,obj.getX() + obj.getRadius() , obj.getY() - obj.getRadius());
 		}
 	}
+	
 
 
 	//__________________ HELP FUNCTIONS __________________
@@ -353,7 +356,18 @@ public class WorldView extends BasicGameState implements ScreenController {
 	public int getID() {
 		return 1;
 	}
-
+	
+	/**
+	 * Returns the information values in plain text representation of the currently selected entity.
+	 * @return
+	 */
+	public String getSelectionStats() {
+		return this.selectedObject.getStats().toString();
+	}
+	
+	
+	
+	/*
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
 
@@ -370,12 +384,50 @@ public class WorldView extends BasicGameState implements ScreenController {
 		// TODO Auto-generated method stub
 
 	}
-
+	*/
+	
+	/*
+	 * Enter the planet that is in the currently active selection. This method will change the state to the on-planet view where the player can build stuff
+	 * and check on all planet activity.
+	 */
 	public void EnterSelectedPlanet() {
-		sbg.enterState(0);
+		//sbg.enterState(0); TODO: Fix this bug
+		System.out.println("Succesful button click!");
+	}
+	@Override
+	protected void enterState(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void leaveState(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void bind(Nifty nifty, Screen screen) {
+
+		
+	}
+	@Override
+	public void onEndScreen() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onStartScreen() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
+/**
+ * Currently not in use. Was used to try and get another screencontroller to handle input, instead of WorldView.
+ * @author Wouter
+ *
+ */
 class ScreenControllerExample implements ScreenController {
 	public void bind(Nifty nifty, Screen screen) {}
 	public void onEndScreen() {}

@@ -131,4 +131,18 @@ public class Planet extends CelestialBody {
 		this.setMinerals(new ArrayList<Mineral>());
 		this.setShips(new ArrayList<Ship>()); 
 	}
+	
+	public Collection<String> getStats() {
+		ArrayList<String> stats = new ArrayList<String>();
+		stats.add("Minerals:");
+		for (Mineral min : getMinerals()) {
+			stats.add(min.toString());
+		}
+		stats.add("Information:");
+		stats.add("Temp: " + super.getTemperature() + "°C");
+		stats.add("Oxygen: " + this.hasOxygen());
+		stats.add("Water: " + this.hasWater());
+		stats.add("Inhabitable: " + this.isLivable());
+		return stats;
+	}
 }

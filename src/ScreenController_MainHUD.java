@@ -1,24 +1,20 @@
-import org.newdawn.slick.state.BasicGameState;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
+/*
+ * The main HUD in the WorldView is controlled by this ScreenController. Methods that result from interaction with the HUD should
+ * be implemented here, and interface with the WorldView public methods.
+ */
 class ScreenController_MainHUD implements ScreenController {
 
-	private Nifty nifty;
-	private Screen screen;
-	private BasicGameState worldview;
+	
 	public ScreenController_MainHUD() {
 		
 	}
 	
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
-		nifty.registerScreenController(this);
-		nifty.addControls();
-		this.nifty = nifty;
-		this.screen = screen;
 	}
 
 	@Override
@@ -34,7 +30,7 @@ class ScreenController_MainHUD implements ScreenController {
 	}
 	
 	public void EnterSelectedPlanet() {
-		System.err.println("hi");
+		System.out.println("hi");
 	}
 	
 }

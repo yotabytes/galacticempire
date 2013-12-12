@@ -13,22 +13,25 @@
     	 <image filename="img/HUD.png" width="100%" height="100%"></image>
     </layer>
     <layer id="foreground" childLayout="horizontal">
-    <panel id="leftSpaceHolder" width="80%" height="100%" childLayout="vertical" >
-    </panel>
-     <panel id="rightUIBox" width="20%" height="100%" childLayout="vertical" >  
-     	<panel id="rightUIBoxTop" width="100%" height="80%" childLayout="vertical" >
-     		<effect>
-   				 <onHover name="move" mode="in" direction="top" length="300" startDelay="0" inherit="true"/>
- 			 </effect>
+    	<panel id="leftSpaceHolder" width="80%" height="100%" childLayout="vertical" >
+    	</panel>
+     	<panel id="rightUIBox" width="20%" height="100%" childLayout="vertical" >  
+     		<panel id="rightUIBoxTop" width="100%" height="80%" childLayout="vertical" >
+     			<panel id="Resources" width="100%" height="70%" childLayout="vertical">
+     			</panel>
+     			<panel id="Selection" width="100%" childLayout="vertical" paddingLeft="2%">
+      	 				
+					<text text="${CALL.getSelectionStats()}" style="nifty-label" width="98%" height="100%" font="fonts/MTF Cool Kid.ttf" />
+     			</panel>
+    	 	</panel>
+     		<panel id="rightUIBoxBottom" width="100%" height="20%" childLayout="horizontal" >
+      		 <control name="button" label="Enter Planet" id="Btn_EnterPlanet" align="left" valign="top" visibleToMouse="true" childLayout="vertical" font="fonts/MTF Cool Kid.ttf">
+      	 		<interact onClick="EnterSelectedPlanet()"/>
+      		 </control>
+      	 	<control name="button" label="View Storage" id="Btn_ViewStorage" align="left" valign="top" childLayout="vertical" font="fonts/MTF Cool Kid.ttf"> 	
+      	 	</control>
+      	 	</panel>
      	</panel>
-     	<panel id="rightUIBoxBottom" width="100%" height="20%" childLayout="horizontal" >
-      	 <control name="button" label="Enter Planet" id="Btn_EnterPlanet" align="left" valign="top" visibleToMouse="true">
-      	 	<interact onClick="EnterSelectedPlanet()" />
-      	 </control>
-      	 <control name="button" label="View Storage" id="Btn_ViewStorage" align="left" valign="top">
-      	 </control>
-      	 </panel>
-     </panel>
      </layer>
 </screen>
 </nifty>

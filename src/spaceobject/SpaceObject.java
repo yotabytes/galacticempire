@@ -1,6 +1,8 @@
 package spaceobject;
 
 
+import java.util.Collection;
+
 import org.newdawn.slick.Image;
 
 
@@ -65,5 +67,8 @@ public abstract class SpaceObject {
 	}
 
 	public String getDescription;
+	
+	//Return the information about this object as text.
+	public abstract Collection<String> getStats();
 	
 }

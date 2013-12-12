@@ -1,5 +1,10 @@
 package spaceobject;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import minerals.Mineral;
+
 /**
  * A star is an object in the galaxy that emits light and warmth. The amount that propagates through space and afflicts nearby entities is linear to the size of the star.
  * @author Wouter
@@ -22,5 +27,12 @@ public class Star extends CelestialBody {
 
 	public String getDescription() {
 		return "A star that emits light and warmth";
+	}
+	
+	public Collection<String> getStats() {
+		ArrayList<String> stats = new ArrayList<String>();
+		stats.add("Information:");
+		stats.add("Temp: " + super.getTemperature() + "°C");
+		return stats;
 	}
 }
